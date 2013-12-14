@@ -91,8 +91,8 @@ Engine
   
             done = self.pins().reduce (done, pin) ->
               done and pin.hit()
-            true
-            
+            , true
+
             if done
               gameOver = true
               alert "A winner is you"
@@ -126,12 +126,18 @@ Engine
               color: "white"
               position: currentPosition
               text: (power * 100).toFixed(2)
-
+          else if self.ball()
+            self.ball().draw canvas
+          else if mousePosition
+            canvas.drawCircle
+              x: mousePosition.x
+              y: mousePosition.y
+              color: "blue"
+              radius: 64
+          
           self.pins.forEach (pin) ->
             pin.draw(canvas)
 
-          if self.ball()
-            self.ball().draw canvas
 
           if I.age < 5
             instructions.split("\n").map (text, i) ->
@@ -141,6 +147,24 @@ Engine
                 color: "pink"
                 position: Point(0.5, 0.5).scale(self.size()).add Point(0, 50 * (i - 1) )
                 text: text
+
+      # Hack for gosting on pointer devices
+      mousePosition = null
+
+      $("body").on "mousemove", (e) ->
+        mousePosition = localPosition(e)
+        mousePosition.x = mousePosition.x.clamp(0, I.startZone)
+      
+      localPosition = (e) ->
+        $currentTarget = $("canvas")
+        offset = $currentTarget.offset()
+    
+        point = Point(
+          (e.pageX - offset.left)
+          (e.pageY - offset.top)
+        )
+    
+        return point
 
       self.resetLevel()
 
