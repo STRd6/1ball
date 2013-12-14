@@ -5,16 +5,47 @@ Draw one line.
 
     require "./setup"
     Canvas = require "touch-canvas"
+    Compositions = require "./lib/compositions"
     {Size, Bounds} = require "./lib/util"
 
     FPS = 60
-    dt = 1000/FPS
+    dt = 1/FPS
 
     size = Size
       width: 1024
       height: 576
 
     canvas = Canvas size
+
+    Ball = (I={}, self=Core(I)) ->
+      Object.defaults I,
+        color: "blue"
+        position:
+          x: 0
+          y: 0
+        velocity:
+          x: 0
+          y: 0
+        radius: 64
+
+      self.include Compositions
+
+      self.attrModel "position", Point
+      self.attrModel "velocity", Point
+
+      self.extend
+        draw: (canvas) ->
+          p = self.position()
+          canvas.drawCircle
+            x: p.x
+            y: p.y
+            color: I.color
+            radius: I.radius
+
+        update: ->
+          self.position(self.position().add(self.velocity().scale(dt)))
+
+      return self
 
     $("body").append canvas.element()
 
@@ -27,16 +58,21 @@ Draw one line.
       currentPosition = position.scale(size)
 
     canvas.on "release", (position) ->
-      target = position.scale(size)
+      currentPosition = position.scale(size)
 
-      fire startPosition, getPower(startPosition, target)
+      fire startPosition, currentPosition
 
       startPosition = currentPosition = null
 
-    fire = (start, power) ->
-      console.log start, power
+    ball = null
 
     update = ->
+      ball?.update()
+
+    fire = (start, target) ->
+      ball = Ball
+        position: start
+        velocity: target.subtract(start).norm getPower(start, target) * 1600
 
     getPower = (a, b) ->
       p = Point.distance(a, b) / 200
@@ -67,9 +103,12 @@ Draw one line.
           position: currentPosition
           text: (power * 100).toFixed(2)
 
+      if ball
+        ball.draw canvas
+
     t = 0
     setInterval ->
       update()
       draw()
-      t += dt/1000
-    , dt
+      t += dt
+    , dt * 1000
