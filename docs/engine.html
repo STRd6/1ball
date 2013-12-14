@@ -69,6 +69,12 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
     'r' to Restart Level
   """</span>
 
+  restartText = <span class="string">"""
+    Oops, didn't hit them all!
+
+    Press 'r' to restart level
+  """</span>
+
   startPosition = currentPosition = <span class="literal">null</span>
 
   <span class="function"><span class="title">getPower</span></span> = (a, b) -&gt;
@@ -84,13 +90,18 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
 
   resetCount = <span class="number">0</span>
 
+  <span class="function"><span class="title">outOfBounds</span></span> = (object) -&gt;
+    p = object.position()
+
+    (p.x &lt; <span class="number">0</span> <span class="keyword">or</span> p.x &gt; self.size().width) <span class="keyword">or</span>
+    (p.y &lt; <span class="number">0</span> <span class="keyword">or</span> p.y &gt; self.size().height)
+
   self.extend
     levelDisplayName: -&gt;
       <span class="string">"<span class="subst">#{I.chapter + <span class="number">1</span>}</span> - <span class="subst">#{self.levelName()}</span>"</span>
 
     levelNames: -&gt;
       names = Object.keys(Chapters[I.chapter])
-      console.log names
 
       <span class="keyword">return</span> names
 
@@ -98,7 +109,6 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
       Chapters[I.chapter][self.levelName()]()
 
     resetLevel: -&gt;
-      console.log <span class="string">"resettin"</span>
       resetCount += <span class="number">1</span>
       gameOver = <span class="literal">false</span>
       self.ball(<span class="literal">null</span>)
@@ -131,7 +141,6 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
       <span class="keyword">if</span> Chapters[I.chapter]
         name = self.levelNames().first()
         I.levelName = name
-        console.log name
         self.goToLevel name
       <span class="keyword">else</span>
         <span class="comment"># TODO: Better winning message</span>
@@ -155,7 +164,6 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         startPosition = currentPosition = <span class="literal">null</span>
 
     fire: (start, target) -&gt;
-      console.log <span class="string">"fire"</span>
       self.ball Ball
         position: start
         velocity: target.subtract(start).norm getPower(start, target) * <span class="number">1600</span> + <span class="number">1</span>
@@ -165,6 +173,13 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         self.pins().concat(self.ball())
       <span class="keyword">else</span>
         self.pins()
+
+    shouldRestart: -&gt;
+      <span class="keyword">if</span> self.ball()
+        <span class="keyword">if</span> outOfBounds self.ball()
+          self.pins().reduce (restart, pin) -&gt;
+            restart <span class="keyword">and</span> !(pin.hit() <span class="keyword">and</span> !outOfBounds(pin))
+          , <span class="literal">true</span>
 
     update: (dt) -&gt;
       <span class="keyword">if</span> I.age &gt; resetAt
@@ -182,10 +197,18 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         , <span class="literal">true</span>
 
         <span class="keyword">if</span> done
-          console.log <span class="string">"duneroo"</span>
           self.goToLevel() <span class="comment"># Next level</span>
 
       I.age += dt
+
+    drawMessage: (message, canvas) -&gt;
+      message.split(<span class="string">"\n"</span>).map (text, i) -&gt;
+        canvas.font <span class="string">"40px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
+
+        canvas.centerText
+          color: <span class="string">"pink"</span>
+          position: Point(<span class="number">0.5</span>, <span class="number">0.5</span>).scale(self.size()).add Point(<span class="number">0</span>, <span class="number">50</span> * (i - <span class="number">1</span>) )
+          text: text
 
     draw: (canvas) -&gt;
       canvas.fill(<span class="string">"red"</span>)
@@ -234,13 +257,9 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         canvas.fill <span class="string">"rgba(0, 0, 0, <span class="subst">#{opacity.toFixed(<span class="number">8</span>)}</span>)"</span>
 
       <span class="keyword">if</span> I.age &lt; <span class="number">5</span>
-        instructions.split(<span class="string">"\n"</span>).map (text, i) -&gt;
-          canvas.font <span class="string">"40px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
-
-          canvas.centerText
-            color: <span class="string">"pink"</span>
-            position: Point(<span class="number">0.5</span>, <span class="number">0.5</span>).scale(self.size()).add Point(<span class="number">0</span>, <span class="number">50</span> * (i - <span class="number">1</span>) )
-            text: text
+        self.drawMessage instructions, canvas
+      <span class="keyword">else</span> <span class="keyword">if</span> self.shouldRestart() <span class="keyword">and</span> !fadeStart
+        self.drawMessage restartText, canvas 
 
       <span class="comment"># Level Name</span>
       displayName = self.levelDisplayName()
