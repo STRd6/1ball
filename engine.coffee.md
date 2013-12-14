@@ -32,8 +32,14 @@ Engine
       
       instructions = """
         Click and Drag
-        
+
         'r' to Restart Level
+      """
+
+      restartText = """
+        Oops, didn't hit them all!
+
+        Press 'r' to restart level
       """
 
       startPosition = currentPosition = null
@@ -50,6 +56,12 @@ Engine
       fadeEnd = 1
 
       resetCount = 0
+      
+      outOfBounds = (object) ->
+        p = object.position()
+
+        (p.x < 0 or p.x > self.size().width) or
+        (p.y < 0 or p.y > self.size().height)
 
       self.extend
         levelDisplayName: ->
@@ -57,7 +69,6 @@ Engine
 
         levelNames: ->
           names = Object.keys(Chapters[I.chapter])
-          console.log names
 
           return names
 
@@ -65,7 +76,6 @@ Engine
           Chapters[I.chapter][self.levelName()]()
 
         resetLevel: ->
-          console.log "resettin"
           resetCount += 1
           gameOver = false
           self.ball(null)
@@ -98,7 +108,6 @@ Engine
           if Chapters[I.chapter]
             name = self.levelNames().first()
             I.levelName = name
-            console.log name
             self.goToLevel name
           else
             # TODO: Better winning message
@@ -122,7 +131,6 @@ Engine
             startPosition = currentPosition = null
 
         fire: (start, target) ->
-          console.log "fire"
           self.ball Ball
             position: start
             velocity: target.subtract(start).norm getPower(start, target) * 1600 + 1
@@ -132,6 +140,13 @@ Engine
             self.pins().concat(self.ball())
           else
             self.pins()
+        
+        shouldRestart: ->
+          if self.ball()
+            if outOfBounds self.ball()
+              self.pins().reduce (restart, pin) ->
+                restart and !(pin.hit() and !outOfBounds(pin))
+              , true
 
         update: (dt) ->
           if I.age > resetAt
@@ -149,10 +164,18 @@ Engine
             , true
 
             if done
-              console.log "duneroo"
               self.goToLevel() # Next level
 
           I.age += dt
+
+        drawMessage: (message, canvas) ->
+          message.split("\n").map (text, i) ->
+            canvas.font "40px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"
+
+            canvas.centerText
+              color: "pink"
+              position: Point(0.5, 0.5).scale(self.size()).add Point(0, 50 * (i - 1) )
+              text: text
 
         draw: (canvas) ->
           canvas.fill("red")
@@ -201,14 +224,10 @@ Engine
             canvas.fill "rgba(0, 0, 0, #{opacity.toFixed(8)})"
 
           if I.age < 5
-            instructions.split("\n").map (text, i) ->
-              canvas.font "40px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"
+            self.drawMessage instructions, canvas
+          else if self.shouldRestart() and !fadeStart
+            self.drawMessage restartText, canvas 
 
-              canvas.centerText
-                color: "pink"
-                position: Point(0.5, 0.5).scale(self.size()).add Point(0, 50 * (i - 1) )
-                text: text
-          
           # Level Name
           displayName = self.levelDisplayName()
           canvas.font "40px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"
