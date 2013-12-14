@@ -37,16 +37,47 @@
             </div>
             <div class="content"><pre><code class="lang-coffeescript">require <span class="string">"./setup"</span>
 Canvas = require <span class="string">"touch-canvas"</span>
+Compositions = require <span class="string">"./lib/compositions"</span>
 {Size, Bounds} = require <span class="string">"./lib/util"</span>
 
 FPS = <span class="number">60</span>
-dt = <span class="number">1000</span>/FPS
+dt = <span class="number">1</span>/FPS
 
 size = Size
   width: <span class="number">1024</span>
   height: <span class="number">576</span>
 
 canvas = Canvas size
+
+<span class="function"><span class="title">Ball</span></span> = (I={}, self=Core(I)) -&gt;
+  Object.defaults I,
+    color: <span class="string">"blue"</span>
+    position:
+      x: <span class="number">0</span>
+      y: <span class="number">0</span>
+    velocity:
+      x: <span class="number">0</span>
+      y: <span class="number">0</span>
+    radius: <span class="number">64</span>
+
+  self.include Compositions
+
+  self.attrModel <span class="string">"position"</span>, Point
+  self.attrModel <span class="string">"velocity"</span>, Point
+
+  self.extend
+    draw: (canvas) -&gt;
+      p = self.position()
+      canvas.drawCircle
+        x: p.x
+        y: p.y
+        color: I.color
+        radius: I.radius
+
+    update: -&gt;
+      self.position(self.position().add(self.velocity().scale(dt)))
+
+  <span class="keyword">return</span> self
 
 $(<span class="string">"body"</span>).append canvas.element()
 
@@ -59,16 +90,21 @@ canvas.<span class="literal">on</span> <span class="string">"move"</span>, (posi
   currentPosition = position.scale(size)
 
 canvas.<span class="literal">on</span> <span class="string">"release"</span>, (position) -&gt;
-  target = position.scale(size)
+  currentPosition = position.scale(size)
 
-  fire startPosition, getPower(startPosition, target)
+  fire startPosition, currentPosition
 
   startPosition = currentPosition = <span class="literal">null</span>
 
-<span class="function"><span class="title">fire</span></span> = (start, power) -&gt;
-  console.log start, power
+ball = <span class="literal">null</span>
 
 <span class="function"><span class="title">update</span></span> = -&gt;
+  ball?.update()
+
+<span class="function"><span class="title">fire</span></span> = (start, target) -&gt;
+  ball = Ball
+    position: start
+    velocity: target.subtract(start).norm getPower(start, target) * <span class="number">1600</span>
 
 <span class="function"><span class="title">getPower</span></span> = (a, b) -&gt;
   p = Point.distance(a, b) / <span class="number">200</span>
@@ -99,12 +135,15 @@ canvas.<span class="literal">on</span> <span class="string">"release"</span>, (p
       position: currentPosition
       text: (power * <span class="number">100</span>).toFixed(<span class="number">2</span>)
 
+  <span class="keyword">if</span> ball
+    ball.draw canvas
+
 t = <span class="number">0</span>
 setInterval -&gt;
   update()
   draw()
-  t += dt/<span class="number">1000</span>
-, dt</code></pre>
+  t += dt
+, dt * <span class="number">1000</span></code></pre>
 </div>
         </li>
         
