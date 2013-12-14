@@ -9,7 +9,7 @@ The ball is what the player controls.
       Object.defaults I,
         color: "blue"
         radius: 64
-        mass: 10
+        mass: 5
 
       self = GameObject(I)
 

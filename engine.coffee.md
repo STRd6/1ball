@@ -15,7 +15,7 @@ Engine
     module.exports = (I={}, self=Core(I)) ->
       Object.defaults I,
         age: 0
-        levelName: "one"
+        levelName: "one" # levelNames.last()
         pins: [
           {}
         ]
