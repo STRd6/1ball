@@ -38,17 +38,16 @@
 Hotkeys = require <span class="string">"./hotkeys"</span>
 
 Ball = require <span class="string">"./ball"</span>
-Levels = require <span class="string">"./levels"</span>
+Chapters = require <span class="string">"./levels"</span>
 Pin = require <span class="string">"./pin"</span>
 Physics = require <span class="string">"./physics"</span>
 {Size} = require <span class="string">"./lib/util"</span>
 
-levelNames = Object.keys(Levels)
-
 module.<span class="function"><span class="title">exports</span></span> = (I={}, self=Core(I)) -&gt;
   Object.defaults I,
     age: <span class="number">0</span>
-    levelName: <span class="string">"one"</span> <span class="comment"># levelNames.last()</span>
+    chapter: <span class="number">0</span>
+    levelName: <span class="string">"one"</span> <span class="comment">#levelNames.last()</span>
     pins: [
       {}
     ]
@@ -83,14 +82,29 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
   resetAt = <span class="number">0</span>
   fadeEnd = <span class="number">1</span>
 
+  resetCount = <span class="number">0</span>
+
   self.extend
+    levelDisplayName: -&gt;
+      <span class="string">"<span class="subst">#{I.chapter + <span class="number">1</span>}</span> - <span class="subst">#{self.levelName()}</span>"</span>
+
+    levelNames: -&gt;
+      names = Object.keys(Chapters[I.chapter])
+      console.log names
+
+      <span class="keyword">return</span> names
+
+    currentLevelData: -&gt;
+      Chapters[I.chapter][self.levelName()]()
+
     resetLevel: -&gt;
       console.log <span class="string">"resettin"</span>
+      resetCount += <span class="number">1</span>
       gameOver = <span class="literal">false</span>
       self.ball(<span class="literal">null</span>)
 
       <span class="comment"># Reset pins</span>
-      self.pins Levels[self.levelName()]()
+      self.pins self.currentLevelData()
 
     goToLevel: (name) -&gt;
       <span class="keyword">return</span> <span class="keyword">if</span> fadeStart
@@ -103,11 +117,25 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
       <span class="keyword">if</span> name
         <span class="comment"># Jump to a level by name</span>
       <span class="keyword">else</span>
-        nextIndex = levelNames.indexOf(I.levelName) + <span class="number">1</span>
-        name = levelNames[nextIndex]
+        nextIndex = self.levelNames().indexOf(I.levelName) + <span class="number">1</span>
+        name = self.levelNames()[nextIndex]
 
       <span class="keyword">if</span> name
         I.levelName = name
+      <span class="keyword">else</span>
+        self.nextChapter()
+
+    nextChapter: -&gt;
+      I.chapter += <span class="number">1</span>
+
+      <span class="keyword">if</span> Chapters[I.chapter]
+        name = self.levelNames().first()
+        I.levelName = name
+        console.log name
+        self.goToLevel name
+      <span class="keyword">else</span>
+        <span class="comment"># TODO: Better winning message</span>
+        alert <span class="string">"a winner is you"</span>
 
     touch: (position) -&gt;
       <span class="keyword">unless</span> self.ball()
@@ -213,6 +241,16 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
             color: <span class="string">"pink"</span>
             position: Point(<span class="number">0.5</span>, <span class="number">0.5</span>).scale(self.size()).add Point(<span class="number">0</span>, <span class="number">50</span> * (i - <span class="number">1</span>) )
             text: text
+
+      <span class="comment"># Level Name</span>
+      displayName = self.levelDisplayName()
+      canvas.font <span class="string">"40px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
+      canvas.drawText
+        color: <span class="string">"white"</span>
+        text: displayName
+        position:
+          x: self.size().width - canvas.measureText(displayName) - <span class="number">20</span>
+          y: self.size().height - <span class="number">20</span>
 
   <span class="comment"># Hack for gosting on pointer devices</span>
   mousePosition = <span class="literal">null</span>
