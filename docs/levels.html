@@ -46,6 +46,18 @@ size = Size
     Pin
       position: p.scale(size)
 
+<span class="function"><span class="title">semiCircle</span></span> = -&gt;
+  points = []
+
+  <span class="number">16.</span>circularPoints (p, i) -&gt;
+    p = p.scale(<span class="number">0.4</span>).add(Point(<span class="number">1</span>, <span class="number">0.5</span>))
+    p.x = p.x * <span class="number">576</span> / <span class="number">1024</span>
+
+    <span class="keyword">if</span> <span class="number">0</span> &lt; i &lt; <span class="number">8</span>
+      points.push p
+
+  points
+
 module.exports =
   one: -&gt;
     map [
@@ -59,13 +71,25 @@ module.exports =
   three: -&gt;
     map [
       Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
-      Point(<span class="number">0.33</span>, <span class="number">0.33</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.25</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
     ]
   deuce: -&gt;
     map [
-      Point(<span class="number">0.25</span>, <span class="number">0.25</span>)
-      Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.1</span>)
+      Point(<span class="number">0.9</span>, <span class="number">0.9</span>)
+    ]
+  four: -&gt;
+    map [
+      Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.25</span>)
+      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.75</span>)
+    ]
+  <span class="string">";)"</span>: -&gt;
+    map semiCircle().concat [
+      Point(<span class="number">0.49</span>, <span class="number">0.25</span>)
+      Point(<span class="number">0.66</span>, <span class="number">0.25</span>)
     ]</code></pre>
 </div>
         </li>
