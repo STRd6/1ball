@@ -74,7 +74,8 @@ constructor must be passed in explicitly.</p>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">    attrModel: (name, Model) -&gt;
-      model = Model(I[name])
+      <span class="keyword">if</span> I[name]
+        model = Model(I[name])
 
       self[name] = Observable(model)
 

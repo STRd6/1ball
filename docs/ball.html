@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>main</title>
+  <title>ball</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
@@ -18,7 +18,7 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="1ball">1ball</h1>
+              <h1 id="ball">Ball</h1>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -32,36 +32,40 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Draw one line.</p>
+              <p>The ball is what the player controls.</p>
 
             </div>
-            <div class="content"><pre><code class="lang-coffeescript">require <span class="string">"./setup"</span>
-Canvas = require <span class="string">"touch-canvas"</span>
-{Size, Bounds} = require <span class="string">"./lib/util"</span>
-Engine = require <span class="string">"./engine"</span>
+            <div class="content"><pre><code class="lang-coffeescript">Compositions = require <span class="string">"./lib/compositions"</span>
 
-FPS = <span class="number">60</span>
-dt = <span class="number">1</span>/FPS
+module.<span class="function"><span class="title">exports</span></span> = (I={}, self=Core(I)) -&gt;
+  Object.defaults I,
+    color: <span class="string">"blue"</span>
+    position:
+      x: <span class="number">0</span>
+      y: <span class="number">0</span>
+    velocity:
+      x: <span class="number">0</span>
+      y: <span class="number">0</span>
+    radius: <span class="number">64</span>
 
-size = Size
-  width: <span class="number">1024</span>
-  height: <span class="number">576</span>
+  self.include Compositions
 
-engine = Engine
-  size: size
+  self.attrModel <span class="string">"position"</span>, Point
+  self.attrModel <span class="string">"velocity"</span>, Point
 
-canvas = Canvas size
+  self.extend
+    draw: (canvas) -&gt;
+      p = self.position()
+      canvas.drawCircle
+        x: p.x
+        y: p.y
+        color: I.color
+        radius: I.radius
 
-$(<span class="string">"body"</span>).append canvas.element()
+    update: (dt) -&gt;
+      self.position(self.position().add(self.velocity().scale(dt)))
 
-canvas.<span class="literal">on</span> <span class="string">"touch"</span>, engine.touch
-canvas.<span class="literal">on</span> <span class="string">"move"</span>, engine.move
-canvas.<span class="literal">on</span> <span class="string">"release"</span>, engine.release
-
-setInterval -&gt;
-  engine.update(dt)
-  engine.draw(canvas)
-, dt * <span class="number">1000</span></code></pre>
+  <span class="keyword">return</span> self</code></pre>
 </div>
         </li>
         

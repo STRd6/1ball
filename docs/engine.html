@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>engine</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    <ul class="sections">
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="engine">Engine</h1>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">Compositions = require <span class="string">"./lib/compositions"</span>
+Hotkeys = require <span class="string">"./hotkeys"</span>
+
+Ball = require <span class="string">"./ball"</span>
+{Size} = require <span class="string">"./lib/util"</span>
+
+module.<span class="function"><span class="title">exports</span></span> = (I={}, self=Core(I)) -&gt;
+  Object.defaults I,
+    age: <span class="number">0</span>
+
+  self.include Compositions
+  self.include Hotkeys
+
+  self.attrAccessor <span class="string">"age"</span>
+
+  self.attrModel <span class="string">"ball"</span>, Ball
+  self.attrModel <span class="string">"size"</span>, Size
+
+  startPosition = currentPosition = <span class="literal">null</span>
+
+  <span class="function"><span class="title">getPower</span></span> = (a, b) -&gt;
+    p = Point.distance(a, b) / <span class="number">200</span>
+
+    p.clamp <span class="number">0</span>, <span class="number">1</span>
+
+  self.extend
+    restartLevel: -&gt;
+      self.ball(<span class="literal">null</span>)
+
+      <span class="comment"># TODO: Reset pins</span>
+
+    touch: (position) -&gt;
+      <span class="keyword">unless</span> self.ball()
+        startPosition = currentPosition = position.scale(self.size())
+
+    move: (position) -&gt;
+      currentPosition = position.scale(self.size())
+
+    release: (position) -&gt;
+      <span class="keyword">if</span> startPosition
+        currentPosition = position.scale(self.size())
+
+        self.fire startPosition, currentPosition
+
+        startPosition = currentPosition = <span class="literal">null</span>
+
+    fire: (start, target) -&gt;
+      self.ball Ball
+        position: start
+        velocity: target.subtract(start).norm getPower(start, target) * <span class="number">1600</span> + <span class="number">1</span>
+
+    update: (dt) -&gt;
+      self.ball()?.update(dt)
+
+      I.age += dt
+
+    draw: (canvas) -&gt;
+      canvas.fill(<span class="string">"red"</span>)
+
+      <span class="keyword">if</span> startPosition
+        power = getPower(startPosition, currentPosition)
+
+        canvas.drawCircle
+          x: startPosition.x
+          y: startPosition.y
+          color: <span class="string">"blue"</span>
+          radius: <span class="number">64</span>
+
+        canvas.drawLine
+          start: startPosition
+          end: currentPosition
+          color: <span class="string">"black"</span>
+
+        fontSize = <span class="number">32</span> + <span class="number">6</span> * Math.sin(self.age() * <span class="number">1.5</span> * Math.TAU)
+        canvas.font <span class="string">"<span class="subst">#{fontSize}</span>px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
+        canvas.centerText
+          color: <span class="string">"white"</span>
+          position: currentPosition
+          text: (power * <span class="number">100</span>).toFixed(<span class="number">2</span>)
+
+      <span class="keyword">if</span> self.ball()
+        self.ball().draw canvas</code></pre>
+</div>
+        </li>
+        
+    </ul>
+  </div>
+  <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script>
+<script src="http://strd6.github.io/require/v0.2.2.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://strd6.github.io/tempest/javascripts/envweb-v0.4.5.js"></script><script>
+  $.ajax({
+    url: "http://strd6.github.io/interactive/v0.8.1.jsonp",
+    dataType: "jsonp",
+    jsonpCallback: "STRd6/interactive:v0.8.1",
+    cache: true
+  }).then(function(PACKAGE) {
+    Require.generateFor(PACKAGE)("./" + PACKAGE.entryPoint)
+  })
+</script><script src="package.js"></script>
+</body>
+</html>

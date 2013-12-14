@@ -37,8 +37,8 @@
             </div>
             <div class="content"><pre><code class="lang-coffeescript">require <span class="string">"./setup"</span>
 Canvas = require <span class="string">"touch-canvas"</span>
-Compositions = require <span class="string">"./lib/compositions"</span>
 {Size, Bounds} = require <span class="string">"./lib/util"</span>
+Engine = require <span class="string">"./engine"</span>
 
 FPS = <span class="number">60</span>
 dt = <span class="number">1</span>/FPS
@@ -47,102 +47,20 @@ size = Size
   width: <span class="number">1024</span>
   height: <span class="number">576</span>
 
+engine = Engine
+  size: size
+
 canvas = Canvas size
-
-<span class="function"><span class="title">Ball</span></span> = (I={}, self=Core(I)) -&gt;
-  Object.defaults I,
-    color: <span class="string">"blue"</span>
-    position:
-      x: <span class="number">0</span>
-      y: <span class="number">0</span>
-    velocity:
-      x: <span class="number">0</span>
-      y: <span class="number">0</span>
-    radius: <span class="number">64</span>
-
-  self.include Compositions
-
-  self.attrModel <span class="string">"position"</span>, Point
-  self.attrModel <span class="string">"velocity"</span>, Point
-
-  self.extend
-    draw: (canvas) -&gt;
-      p = self.position()
-      canvas.drawCircle
-        x: p.x
-        y: p.y
-        color: I.color
-        radius: I.radius
-
-    update: -&gt;
-      self.position(self.position().add(self.velocity().scale(dt)))
-
-  <span class="keyword">return</span> self
 
 $(<span class="string">"body"</span>).append canvas.element()
 
-startPosition = <span class="literal">null</span>
-currentPosition = <span class="literal">null</span>
-canvas.<span class="literal">on</span> <span class="string">"touch"</span>, (position) -&gt;
-  startPosition = currentPosition = position.scale(size)
+canvas.<span class="literal">on</span> <span class="string">"touch"</span>, engine.touch
+canvas.<span class="literal">on</span> <span class="string">"move"</span>, engine.move
+canvas.<span class="literal">on</span> <span class="string">"release"</span>, engine.release
 
-canvas.<span class="literal">on</span> <span class="string">"move"</span>, (position) -&gt;
-  currentPosition = position.scale(size)
-
-canvas.<span class="literal">on</span> <span class="string">"release"</span>, (position) -&gt;
-  currentPosition = position.scale(size)
-
-  fire startPosition, currentPosition
-
-  startPosition = currentPosition = <span class="literal">null</span>
-
-ball = <span class="literal">null</span>
-
-<span class="function"><span class="title">update</span></span> = -&gt;
-  ball?.update()
-
-<span class="function"><span class="title">fire</span></span> = (start, target) -&gt;
-  ball = Ball
-    position: start
-    velocity: target.subtract(start).norm getPower(start, target) * <span class="number">1600</span>
-
-<span class="function"><span class="title">getPower</span></span> = (a, b) -&gt;
-  p = Point.distance(a, b) / <span class="number">200</span>
-
-  p.clamp <span class="number">0</span>, <span class="number">1</span>
-
-<span class="function"><span class="title">draw</span></span> = -&gt;
-  canvas.fill(<span class="string">"red"</span>)
-
-  <span class="keyword">if</span> startPosition
-    power = getPower(startPosition, currentPosition)
-
-    canvas.drawCircle
-      x: startPosition.x
-      y: startPosition.y
-      color: <span class="string">"blue"</span>
-      radius: <span class="number">64</span>
-
-    canvas.drawLine
-      start: startPosition
-      end: currentPosition
-      color: <span class="string">"black"</span>
-
-    fontSize = <span class="number">32</span> + <span class="number">6</span> * Math.sin(t * <span class="number">1.5</span> * Math.TAU)
-    canvas.font <span class="string">"<span class="subst">#{fontSize}</span>px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
-    canvas.centerText
-      color: <span class="string">"white"</span>
-      position: currentPosition
-      text: (power * <span class="number">100</span>).toFixed(<span class="number">2</span>)
-
-  <span class="keyword">if</span> ball
-    ball.draw canvas
-
-t = <span class="number">0</span>
 setInterval -&gt;
-  update()
-  draw()
-  t += dt
+  engine.update(dt)
+  engine.draw(canvas)
 , dt * <span class="number">1000</span></code></pre>
 </div>
         </li>
