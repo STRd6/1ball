@@ -35,17 +35,30 @@
               
             </div>
             <div class="content"><pre><code class="lang-coffeescript">Pin = require <span class="string">"./pin"</span>
+{Size} = require <span class="string">"./lib/util"</span>
+
+size = Size
+  width: <span class="number">1024</span>
+  height: <span class="number">576</span>
+
+module.exports =
+  test: -&gt;
+    [
+      Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+    ].map (p) -&gt;
+      position: p.scale(size)
 
 module.exports = {
   test: -&gt;
     pins = []
 
-    <span class="number">10.</span>times (x) -&gt;
-      <span class="number">10.</span>times (y) -&gt;
+    <span class="number">2.</span>times (x) -&gt;
+      <span class="number">1.</span>times (y) -&gt;
         pins.push Pin
           position:
-            x: <span class="number">50</span> * x
-            y: <span class="number">50</span> * y
+            x: <span class="number">250</span> * (x - <span class="number">0.5</span>) + size.width / <span class="number">2</span>
+            y: <span class="number">250</span> * (x - <span class="number">0.5</span>) + size.height / <span class="number">2</span>
 
     <span class="keyword">return</span> pins
 }</code></pre>

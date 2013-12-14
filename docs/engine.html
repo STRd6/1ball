@@ -50,6 +50,7 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
     pins: [
       {}
     ]
+    startZone: <span class="number">100</span>
 
   self.include Compositions
   self.include Hotkeys
@@ -91,6 +92,8 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
       <span class="keyword">unless</span> self.ball()
         startPosition = currentPosition = position.scale(self.size())
 
+        startPosition.x = startPosition.x.clamp(<span class="number">0</span>, I.startZone)
+
     move: (position) -&gt;
       currentPosition = position.scale(self.size())
 
@@ -129,6 +132,12 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
 
     draw: (canvas) -&gt;
       canvas.fill(<span class="string">"red"</span>)
+      canvas.fill
+        x: <span class="number">0</span>
+        y: <span class="number">0</span>
+        width: I.startZone
+        height: self.size().height
+        color: <span class="string">"gray"</span>
 
       <span class="keyword">if</span> startPosition
         power = getPower(startPosition, currentPosition)
