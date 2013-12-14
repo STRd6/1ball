@@ -26,7 +26,6 @@ Draw one line.
     canvas.on "move", engine.move
     canvas.on "release", engine.release
 
-
     setInterval ->
       engine.update(dt)
       engine.draw(canvas)

@@ -9,8 +9,10 @@ Types
 -----
 
 Normal - Have mass and physics
+Big Ones
 Light - Must be triggered by overlap, but don't have any physical effects
 Bumper - Immovable
+Exploders - Split into multiple
 Portal - Transports entities through it
 
     GameObject = require "./game_object"

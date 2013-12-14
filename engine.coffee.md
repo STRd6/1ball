@@ -5,17 +5,16 @@ Engine
     Hotkeys = require "./hotkeys"
 
     Ball = require "./ball"
-    Levels = require "./levels"
+    Chapters = require "./levels"
     Pin = require "./pin"
     Physics = require "./physics"
     {Size} = require "./lib/util"
 
-    levelNames = Object.keys(Levels)
-
     module.exports = (I={}, self=Core(I)) ->
       Object.defaults I,
         age: 0
-        levelName: "one" # levelNames.last()
+        chapter: 0
+        levelName: "one" #levelNames.last()
         pins: [
           {}
         ]
@@ -50,14 +49,29 @@ Engine
       resetAt = 0
       fadeEnd = 1
 
+      resetCount = 0
+
       self.extend
+        levelDisplayName: ->
+          "#{I.chapter + 1} - #{self.levelName()}"
+
+        levelNames: ->
+          names = Object.keys(Chapters[I.chapter])
+          console.log names
+
+          return names
+
+        currentLevelData: ->
+          Chapters[I.chapter][self.levelName()]()
+
         resetLevel: ->
           console.log "resettin"
+          resetCount += 1
           gameOver = false
           self.ball(null)
 
           # Reset pins
-          self.pins Levels[self.levelName()]()
+          self.pins self.currentLevelData()
 
         goToLevel: (name) ->
           return if fadeStart
@@ -70,11 +84,25 @@ Engine
           if name
             # Jump to a level by name
           else
-            nextIndex = levelNames.indexOf(I.levelName) + 1
-            name = levelNames[nextIndex]
-          
+            nextIndex = self.levelNames().indexOf(I.levelName) + 1
+            name = self.levelNames()[nextIndex]
+
           if name
             I.levelName = name
+          else
+            self.nextChapter()
+            
+        nextChapter: ->
+          I.chapter += 1
+
+          if Chapters[I.chapter]
+            name = self.levelNames().first()
+            I.levelName = name
+            console.log name
+            self.goToLevel name
+          else
+            # TODO: Better winning message
+            alert "a winner is you"
 
         touch: (position) ->
           unless self.ball()
@@ -180,6 +208,16 @@ Engine
                 color: "pink"
                 position: Point(0.5, 0.5).scale(self.size()).add Point(0, 50 * (i - 1) )
                 text: text
+          
+          # Level Name
+          displayName = self.levelDisplayName()
+          canvas.font "40px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"
+          canvas.drawText
+            color: "white"
+            text: displayName
+            position:
+              x: self.size().width - canvas.measureText(displayName) - 20
+              y: self.size().height - 20
 
       # Hack for gosting on pointer devices
       mousePosition = null
