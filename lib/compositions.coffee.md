@@ -25,7 +25,8 @@ model instance exposting a getter/setter method of the same name. The Model
 constructor must be passed in explicitly.
 
         attrModel: (name, Model) ->
-          model = Model(I[name])
+          if I[name]
+            model = Model(I[name])
 
           self[name] = Observable(model)
 

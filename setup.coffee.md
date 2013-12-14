@@ -13,3 +13,5 @@ Set up our runtime styles and expose some stuff for debugging.
 
     # Updating Application Cache and prompting for new version
     require "appcache"
+
+    require "jquery-utils"
