@@ -17,6 +17,7 @@ Engine
         pins: [
           {}
         ]
+        startZone: 100
 
       self.include Compositions
       self.include Hotkeys
@@ -57,6 +58,8 @@ Engine
         touch: (position) ->
           unless self.ball()
             startPosition = currentPosition = position.scale(self.size())
+            
+            startPosition.x = startPosition.x.clamp(0, I.startZone)
 
         move: (position) ->
           currentPosition = position.scale(self.size())
@@ -96,6 +99,12 @@ Engine
 
         draw: (canvas) ->
           canvas.fill("red")
+          canvas.fill
+            x: 0
+            y: 0
+            width: I.startZone
+            height: self.size().height
+            color: "gray"
 
           if startPosition
             power = getPower(startPosition, currentPosition)
