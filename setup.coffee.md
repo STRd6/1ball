@@ -15,3 +15,9 @@ Set up our runtime styles and expose some stuff for debugging.
     require "appcache"
 
     require "jquery-utils"
+
+    window.requestAnimationFrame = 
+      window.requestAnimationFrame or 
+      window.mozRequestAnimationFrame or
+      window.webkitRequestAnimationFrame or 
+      window.msRequestAnimationFrame

@@ -26,7 +26,10 @@ Draw one line.
     canvas.on "move", engine.move
     canvas.on "release", engine.release
 
-    setInterval ->
+    mainLoop = ->
       engine.update(dt)
       engine.draw(canvas)
-    , dt * 1000
+      
+      requestAnimationFrame mainLoop
+
+    requestAnimationFrame mainLoop
