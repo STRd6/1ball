@@ -18,7 +18,7 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="1ine">1ine</h1>
+              <h1 id="1ball">1ball</h1>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -39,6 +39,9 @@
 Canvas = require <span class="string">"touch-canvas"</span>
 {Size, Bounds} = require <span class="string">"./lib/util"</span>
 
+FPS = <span class="number">60</span>
+dt = <span class="number">1000</span>/FPS
+
 size = Size
   width: <span class="number">1024</span>
   height: <span class="number">576</span>
@@ -56,14 +59,28 @@ canvas.<span class="literal">on</span> <span class="string">"move"</span>, (posi
   currentPosition = position.scale(size)
 
 canvas.<span class="literal">on</span> <span class="string">"release"</span>, (position) -&gt;
-  <span class="comment"># TODO: Draw</span>
+  target = position.scale(size)
+
+  fire startPosition, getPower(startPosition, target)
 
   startPosition = currentPosition = <span class="literal">null</span>
 
-<span class="function"><span class="title">paint</span></span> = -&gt;
+<span class="function"><span class="title">fire</span></span> = (start, power) -&gt;
+  console.log start, power
+
+<span class="function"><span class="title">update</span></span> = -&gt;
+
+<span class="function"><span class="title">getPower</span></span> = (a, b) -&gt;
+  p = Point.distance(a, b) / <span class="number">200</span>
+
+  p.clamp <span class="number">0</span>, <span class="number">1</span>
+
+<span class="function"><span class="title">draw</span></span> = -&gt;
   canvas.fill(<span class="string">"red"</span>)
 
   <span class="keyword">if</span> startPosition
+    power = getPower(startPosition, currentPosition)
+
     canvas.drawCircle
       x: startPosition.x
       y: startPosition.y
@@ -75,9 +92,19 @@ canvas.<span class="literal">on</span> <span class="string">"release"</span>, (p
       end: currentPosition
       color: <span class="string">"black"</span>
 
+    fontSize = <span class="number">32</span> + <span class="number">6</span> * Math.sin(t * <span class="number">1.5</span> * Math.TAU)
+    canvas.font <span class="string">"<span class="subst">#{fontSize}</span>px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
+    canvas.centerText
+      color: <span class="string">"white"</span>
+      position: currentPosition
+      text: (power * <span class="number">100</span>).toFixed(<span class="number">2</span>)
+
+t = <span class="number">0</span>
 setInterval -&gt;
-  paint()
-, <span class="number">15</span></code></pre>
+  update()
+  draw()
+  t += dt/<span class="number">1000</span>
+, dt</code></pre>
 </div>
         </li>
         
