@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>pin</title>
+  <title>levels</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
@@ -18,7 +18,7 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="pin">Pin</h1>
+              <h1 id="levels">Levels</h1>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -32,44 +32,23 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>The player must activate all pins to complete the level.</p>
-<p>Pins are activated by being struck with the ball or another pin.</p>
-<h2 id="types">Types</h2>
-
+              
             </div>
-            <div class="content"><pre><code class="lang-coffeescript">
-</code></pre>
-</div>
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              <div class="pilwrap">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>Normal - Have mass and physics
-Light - Must be triggered by overlap, but don&#39;t have any physical effects
-Bumper - Immovable
-Portal - Transports entities through it</p>
+            <div class="content"><pre><code class="lang-coffeescript">Pin = require <span class="string">"./pin"</span>
 
-            </div>
-            <div class="content"><pre><code class="lang-coffeescript">GameObject = require <span class="string">"./game_object"</span>
+module.exports = {
+  test: -&gt;
+    pins = []
 
-module.<span class="function"><span class="title">exports</span></span> = (I={}) -&gt;
-  Object.defaults I,
-    hit: <span class="literal">false</span>
+    <span class="number">10.</span>times (x) -&gt;
+      <span class="number">10.</span>times (y) -&gt;
+        pins.push Pin
+          position:
+            x: <span class="number">50</span> * x
+            y: <span class="number">50</span> * y
 
-  self = GameObject(I)
-
-  self.attrAccessor <span class="string">"hit"</span>
-
-  self.extend
-    collided: (other) -&gt;
-      self.hit <span class="literal">true</span>
-      self.color <span class="string">"yellow"</span>
-
-  <span class="keyword">return</span> self</code></pre>
+    <span class="keyword">return</span> pins
+}</code></pre>
 </div>
         </li>
         

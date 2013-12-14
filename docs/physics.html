@@ -71,6 +71,8 @@
 
       <span class="keyword">if</span> Collision.circular(a.circle(), b.circle())
         resolveCollision(a, b)
+        a.collided(b)
+        b.collided(a)
 
   self.extend
     processPhysics: (objects, dt, steps=<span class="number">2</span>) -&gt;  

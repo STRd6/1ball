@@ -80,7 +80,7 @@ constructor must be passed in explicitly.</p>
       self[name] = Observable(model)
 
       self[name].observe (newValue) -&gt;
-        I[name] = newValue.I
+        I[name] = newValue?.I
 
       <span class="keyword">return</span> self</code></pre>
 </div>

@@ -38,6 +38,7 @@
 Hotkeys = require <span class="string">"./hotkeys"</span>
 
 Ball = require <span class="string">"./ball"</span>
+Levels = require <span class="string">"./levels"</span>
 Pin = require <span class="string">"./pin"</span>
 Physics = require <span class="string">"./physics"</span>
 {Size} = require <span class="string">"./lib/util"</span>
@@ -45,19 +46,16 @@ Physics = require <span class="string">"./physics"</span>
 module.<span class="function"><span class="title">exports</span></span> = (I={}, self=Core(I)) -&gt;
   Object.defaults I,
     age: <span class="number">0</span>
+    levelName: <span class="string">"test"</span>
     pins: [
-      {
-        position:
-          x: <span class="number">200</span>
-          y: <span class="number">200</span>
-      }
+      {}
     ]
 
   self.include Compositions
   self.include Hotkeys
   self.include Physics
 
-  self.attrAccessor <span class="string">"age"</span>
+  self.attrAccessor <span class="string">"age"</span>, <span class="string">"levelName"</span>
 
   self.attrModel <span class="string">"ball"</span>, Ball
   self.attrModel <span class="string">"size"</span>, Size
@@ -69,16 +67,6 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
     'r' to Restart Level
   """</span>
 
-  pins = []
-  <span class="number">10.</span>times (x) -&gt;
-    <span class="number">10.</span>times (y) -&gt;
-      pins.push Pin
-        position:
-          x: <span class="number">50</span> * x
-          y: <span class="number">50</span> * y
-
-  self.pins pins
-
   startPosition = currentPosition = <span class="literal">null</span>
 
   <span class="function"><span class="title">getPower</span></span> = (a, b) -&gt;
@@ -86,11 +74,15 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
 
     p.clamp <span class="number">0</span>, <span class="number">1</span>
 
+  gameOver = <span class="literal">false</span>
+
   self.extend
-    restartLevel: -&gt;
+    resetLevel: -&gt;
+      gameOver = <span class="literal">false</span>
       self.ball(<span class="literal">null</span>)
 
-      <span class="comment"># TODO: Reset pins</span>
+      <span class="comment"># Reset pins</span>
+      self.pins Levels[self.levelName()]()
 
     goToLevel: (n) -&gt;
 
@@ -122,9 +114,18 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         self.pins()
 
     update: (dt) -&gt;
-      self.processPhysics(self.objects(), dt)
+      <span class="keyword">unless</span> gameOver
+        self.processPhysics(self.objects(), dt)
 
-      I.age += dt
+        I.age += dt
+
+        done = self.pins().reduce (done, pin) -&gt;
+          done <span class="keyword">and</span> pin.hit()
+        <span class="literal">true</span>
+
+        <span class="keyword">if</span> done
+          gameOver = <span class="literal">true</span>
+          alert <span class="string">"A winner is you"</span>
 
     draw: (canvas) -&gt;
       canvas.fill(<span class="string">"red"</span>)
@@ -154,7 +155,20 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         pin.draw(canvas)
 
       <span class="keyword">if</span> self.ball()
-        self.ball().draw canvas</code></pre>
+        self.ball().draw canvas
+
+      <span class="keyword">if</span> I.age &lt; <span class="number">5</span>
+        instructions.split(<span class="string">"\n"</span>).map (text, i) -&gt;
+          canvas.font <span class="string">"40px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
+
+          canvas.centerText
+            color: <span class="string">"pink"</span>
+            position: Point(<span class="number">0.5</span>, <span class="number">0.5</span>).scale(self.size()).add Point(<span class="number">0</span>, <span class="number">50</span> * (i - <span class="number">1</span>) )
+            text: text
+
+  self.resetLevel()
+
+  <span class="keyword">return</span> self</code></pre>
 </div>
         </li>
         
