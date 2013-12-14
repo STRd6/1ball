@@ -4,19 +4,46 @@ Engine
     Hotkeys = require "./hotkeys"
 
     Ball = require "./ball"
+    Pin = require "./pin"
+    Physics = require "./physics"
     {Size} = require "./lib/util"
 
     module.exports = (I={}, self=Core(I)) ->
       Object.defaults I,
         age: 0
+        pins: [
+          {
+            position:
+              x: 200
+              y: 200
+          }
+        ]
 
       self.include Compositions
       self.include Hotkeys
+      self.include Physics
 
       self.attrAccessor "age"
 
       self.attrModel "ball", Ball
       self.attrModel "size", Size
+      self.attrModels "pins", Pin
+      
+      instructions = """
+        Click and Drag
+        
+        'r' to Restart Level
+      """
+
+      pins = []
+      10.times (x) ->
+        10.times (y) ->
+          pins.push Pin
+            position:
+              x: 50 * x
+              y: 50 * y
+
+      self.pins pins
 
       startPosition = currentPosition = null
 
@@ -30,7 +57,10 @@ Engine
           self.ball(null)
 
           # TODO: Reset pins
+
+        goToLevel: (n) ->
           
+
         touch: (position) ->
           unless self.ball()
             startPosition = currentPosition = position.scale(self.size())
@@ -51,8 +81,14 @@ Engine
             position: start
             velocity: target.subtract(start).norm getPower(start, target) * 1600 + 1
 
+        objects: ->
+          if self.ball()
+            self.pins().concat(self.ball())
+          else
+            self.pins()
+
         update: (dt) ->
-          self.ball()?.update(dt)
+          self.processPhysics(self.objects(), dt)
 
           I.age += dt
 
@@ -79,6 +115,9 @@ Engine
               color: "white"
               position: currentPosition
               text: (power * 100).toFixed(2)
-    
+
+          self.pins.forEach (pin) ->
+            pin.draw(canvas)
+
           if self.ball()
             self.ball().draw canvas
