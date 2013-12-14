@@ -46,7 +46,13 @@ runtime.applyStyleSheet(require(<span class="string">'./style'</span>))
 <span class="comment"># Updating Application Cache and prompting for new version</span>
 require <span class="string">"appcache"</span>
 
-require <span class="string">"jquery-utils"</span></code></pre>
+require <span class="string">"jquery-utils"</span>
+
+window.requestAnimationFrame = 
+  window.requestAnimationFrame <span class="keyword">or</span> 
+  window.mozRequestAnimationFrame <span class="keyword">or</span>
+  window.webkitRequestAnimationFrame <span class="keyword">or</span> 
+  window.msRequestAnimationFrame</code></pre>
 </div>
         </li>
         

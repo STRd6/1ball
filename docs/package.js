@@ -24,7 +24,7 @@
     "main.coffee.md": {
       "path": "main.coffee.md",
       "mode": "100644",
-      "content": "1ball\n====\n\nDraw one line.\n\n    require \"./setup\"\n    Canvas = require \"touch-canvas\"\n    {Size, Bounds} = require \"./lib/util\"\n    Engine = require \"./engine\"\n\n    FPS = 60\n    dt = 1/FPS\n\n    size = Size\n      width: 1024\n      height: 576\n\n    engine = Engine\n      size: size\n\n    canvas = Canvas size\n\n    $(\"body\").append canvas.element()\n\n    canvas.on \"touch\", engine.touch\n    canvas.on \"move\", engine.move\n    canvas.on \"release\", engine.release\n\n    setInterval ->\n      engine.update(dt)\n      engine.draw(canvas)\n    , dt * 1000\n",
+      "content": "1ball\n====\n\nDraw one line.\n\n    require \"./setup\"\n    Canvas = require \"touch-canvas\"\n    {Size, Bounds} = require \"./lib/util\"\n    Engine = require \"./engine\"\n\n    FPS = 60\n    dt = 1/FPS\n\n    size = Size\n      width: 1024\n      height: 576\n\n    engine = Engine\n      size: size\n\n    canvas = Canvas size\n\n    $(\"body\").append canvas.element()\n\n    canvas.on \"touch\", engine.touch\n    canvas.on \"move\", engine.move\n    canvas.on \"release\", engine.release\n\n    mainLoop = ->\n      engine.update(dt)\n      engine.draw(canvas)\n      \n      requestAnimationFrame mainLoop\n\n    requestAnimationFrame mainLoop\n",
       "type": "blob"
     },
     "pixie.cson": {
@@ -36,7 +36,7 @@
     "setup.coffee.md": {
       "path": "setup.coffee.md",
       "mode": "100644",
-      "content": "Setup\n=====\n\nSet up our runtime styles and expose some stuff for debugging.\n\n    # For debug purposes\n    global.PACKAGE = PACKAGE\n    global.require = require\n\n    runtime = require(\"runtime\")(PACKAGE)\n    runtime.boot()\n    runtime.applyStyleSheet(require('./style'))\n\n    # Updating Application Cache and prompting for new version\n    require \"appcache\"\n\n    require \"jquery-utils\"\n",
+      "content": "Setup\n=====\n\nSet up our runtime styles and expose some stuff for debugging.\n\n    # For debug purposes\n    global.PACKAGE = PACKAGE\n    global.require = require\n\n    runtime = require(\"runtime\")(PACKAGE)\n    runtime.boot()\n    runtime.applyStyleSheet(require('./style'))\n\n    # Updating Application Cache and prompting for new version\n    require \"appcache\"\n\n    require \"jquery-utils\"\n\n    window.requestAnimationFrame = \n      window.requestAnimationFrame or \n      window.mozRequestAnimationFrame or\n      window.webkitRequestAnimationFrame or \n      window.msRequestAnimationFrame\n",
       "type": "blob"
     },
     "style.styl": {
@@ -108,7 +108,7 @@
     },
     "main": {
       "path": "main",
-      "content": "(function() {\n  var Bounds, Canvas, Engine, FPS, Size, canvas, dt, engine, size, _ref;\n\n  require(\"./setup\");\n\n  Canvas = require(\"touch-canvas\");\n\n  _ref = require(\"./lib/util\"), Size = _ref.Size, Bounds = _ref.Bounds;\n\n  Engine = require(\"./engine\");\n\n  FPS = 60;\n\n  dt = 1 / FPS;\n\n  size = Size({\n    width: 1024,\n    height: 576\n  });\n\n  engine = Engine({\n    size: size\n  });\n\n  canvas = Canvas(size);\n\n  $(\"body\").append(canvas.element());\n\n  canvas.on(\"touch\", engine.touch);\n\n  canvas.on(\"move\", engine.move);\n\n  canvas.on(\"release\", engine.release);\n\n  setInterval(function() {\n    engine.update(dt);\n    return engine.draw(canvas);\n  }, dt * 1000);\n\n}).call(this);\n\n//# sourceURL=main.coffee",
+      "content": "(function() {\n  var Bounds, Canvas, Engine, FPS, Size, canvas, dt, engine, mainLoop, size, _ref;\n\n  require(\"./setup\");\n\n  Canvas = require(\"touch-canvas\");\n\n  _ref = require(\"./lib/util\"), Size = _ref.Size, Bounds = _ref.Bounds;\n\n  Engine = require(\"./engine\");\n\n  FPS = 60;\n\n  dt = 1 / FPS;\n\n  size = Size({\n    width: 1024,\n    height: 576\n  });\n\n  engine = Engine({\n    size: size\n  });\n\n  canvas = Canvas(size);\n\n  $(\"body\").append(canvas.element());\n\n  canvas.on(\"touch\", engine.touch);\n\n  canvas.on(\"move\", engine.move);\n\n  canvas.on(\"release\", engine.release);\n\n  mainLoop = function() {\n    engine.update(dt);\n    engine.draw(canvas);\n    return requestAnimationFrame(mainLoop);\n  };\n\n  requestAnimationFrame(mainLoop);\n\n}).call(this);\n\n//# sourceURL=main.coffee",
       "type": "blob"
     },
     "pixie": {
@@ -118,7 +118,7 @@
     },
     "setup": {
       "path": "setup",
-      "content": "(function() {\n  var runtime;\n\n  global.PACKAGE = PACKAGE;\n\n  global.require = require;\n\n  runtime = require(\"runtime\")(PACKAGE);\n\n  runtime.boot();\n\n  runtime.applyStyleSheet(require('./style'));\n\n  require(\"appcache\");\n\n  require(\"jquery-utils\");\n\n}).call(this);\n\n//# sourceURL=setup.coffee",
+      "content": "(function() {\n  var runtime;\n\n  global.PACKAGE = PACKAGE;\n\n  global.require = require;\n\n  runtime = require(\"runtime\")(PACKAGE);\n\n  runtime.boot();\n\n  runtime.applyStyleSheet(require('./style'));\n\n  require(\"appcache\");\n\n  require(\"jquery-utils\");\n\n  window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;\n\n}).call(this);\n\n//# sourceURL=setup.coffee",
       "type": "blob"
     },
     "style": {

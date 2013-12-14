@@ -58,10 +58,13 @@ canvas.<span class="literal">on</span> <span class="string">"touch"</span>, engi
 canvas.<span class="literal">on</span> <span class="string">"move"</span>, engine.move
 canvas.<span class="literal">on</span> <span class="string">"release"</span>, engine.release
 
-setInterval -&gt;
+<span class="function"><span class="title">mainLoop</span></span> = -&gt;
   engine.update(dt)
   engine.draw(canvas)
-, dt * <span class="number">1000</span></code></pre>
+
+  requestAnimationFrame mainLoop
+
+requestAnimationFrame mainLoop</code></pre>
 </div>
         </li>
         
