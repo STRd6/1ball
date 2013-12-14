@@ -23,6 +23,7 @@ Game Object
       self.attrModel "position", Point
 
       self.extend
+        collided: (other) ->
         draw: (canvas) ->
           p = self.position()
           canvas.drawCircle

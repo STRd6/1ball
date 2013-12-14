@@ -31,7 +31,7 @@ constructor must be passed in explicitly.
           self[name] = Observable(model)
 
           self[name].observe (newValue) ->
-            I[name] = newValue.I
+            I[name] = newValue?.I
 
           return self
 

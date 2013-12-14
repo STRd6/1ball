@@ -29,6 +29,8 @@ Stolen from Red Ice: https://raw.github.com/PixieEngine/RedIce/pixie/src/physics
 
           if Collision.circular(a.circle(), b.circle())
             resolveCollision(a, b)
+            a.collided(b)
+            b.collided(a)
 
       self.extend
         processPhysics: (objects, dt, steps=2) ->  

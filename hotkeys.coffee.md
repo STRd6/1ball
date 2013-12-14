@@ -3,12 +3,12 @@ Hotkeys
 
     Hotkeys = require "hotkeys"
 
-    module.exports = (I, self) ->
+    module.exports = (I={}, self) ->
       self.include Hotkeys
 
       hotkeys =
         r: ->
-          self.restartLevel()
+          self.resetLevel()
       
       for key, fn of hotkeys
         self.addHotkey key, fn

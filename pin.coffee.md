@@ -23,4 +23,9 @@ Portal - Transports entities through it
 
       self.attrAccessor "hit"
 
+      self.extend
+        collided: (other) ->
+          self.hit true
+          self.color "yellow"
+
       return self

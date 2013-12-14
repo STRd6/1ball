@@ -1,9 +1,11 @@
 Engine
 ======
+
     Compositions = require "./lib/compositions"
     Hotkeys = require "./hotkeys"
 
     Ball = require "./ball"
+    Levels = require "./levels"
     Pin = require "./pin"
     Physics = require "./physics"
     {Size} = require "./lib/util"
@@ -11,19 +13,16 @@ Engine
     module.exports = (I={}, self=Core(I)) ->
       Object.defaults I,
         age: 0
+        levelName: "test"
         pins: [
-          {
-            position:
-              x: 200
-              y: 200
-          }
+          {}
         ]
 
       self.include Compositions
       self.include Hotkeys
       self.include Physics
 
-      self.attrAccessor "age"
+      self.attrAccessor "age", "levelName"
 
       self.attrModel "ball", Ball
       self.attrModel "size", Size
@@ -35,16 +34,6 @@ Engine
         'r' to Restart Level
       """
 
-      pins = []
-      10.times (x) ->
-        10.times (y) ->
-          pins.push Pin
-            position:
-              x: 50 * x
-              y: 50 * y
-
-      self.pins pins
-
       startPosition = currentPosition = null
 
       getPower = (a, b) ->
@@ -52,11 +41,15 @@ Engine
         
         p.clamp 0, 1
 
+      gameOver = false
+
       self.extend
-        restartLevel: ->
+        resetLevel: ->
+          gameOver = false
           self.ball(null)
 
-          # TODO: Reset pins
+          # Reset pins
+          self.pins Levels[self.levelName()]()
 
         goToLevel: (n) ->
           
@@ -88,13 +81,22 @@ Engine
             self.pins()
 
         update: (dt) ->
-          self.processPhysics(self.objects(), dt)
-
-          I.age += dt
+          unless gameOver
+            self.processPhysics(self.objects(), dt)
+  
+            I.age += dt
+  
+            done = self.pins().reduce (done, pin) ->
+              done and pin.hit()
+            true
+            
+            if done
+              gameOver = true
+              alert "A winner is you"
 
         draw: (canvas) ->
           canvas.fill("red")
-    
+
           if startPosition
             power = getPower(startPosition, currentPosition)
             
@@ -121,3 +123,16 @@ Engine
 
           if self.ball()
             self.ball().draw canvas
+
+          if I.age < 5
+            instructions.split("\n").map (text, i) ->
+              canvas.font "40px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"
+
+              canvas.centerText
+                color: "pink"
+                position: Point(0.5, 0.5).scale(self.size()).add Point(0, 50 * (i - 1) )
+                text: text
+
+      self.resetLevel()
+
+      return self
