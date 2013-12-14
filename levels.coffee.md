@@ -7,25 +7,30 @@ Levels
     size = Size
       width: 1024
       height: 576
-      
+
+    map = (positions) ->
+      positions.map (p) ->
+        Pin
+          position: p.scale(size)
+
     module.exports =
-      test: ->
-        [
+      one: ->
+        map [
+          Point(0.75, 0.5)
+        ]
+      two: ->
+        map [
           Point(0.25, 0.5)
           Point(0.75, 0.5)
-        ].map (p) ->
-          position: p.scale(size)
-    
-    module.exports = {
-      test: ->
-        pins = []
-
-        2.times (x) ->
-          1.times (y) ->
-            pins.push Pin
-              position:
-                x: 250 * (x - 0.5) + size.width / 2
-                y: 250 * (x - 0.5) + size.height / 2
-
-        return pins
-    }
+        ]
+      three: ->
+        map [
+          Point(0.25, 0.5)
+          Point(0.33, 0.33)
+          Point(0.75, 0.5)
+        ]
+      deuce: ->
+        map [
+          Point(0.25, 0.25)
+          Point(0.75, 0.75)
+        ]

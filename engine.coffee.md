@@ -10,10 +10,12 @@ Engine
     Physics = require "./physics"
     {Size} = require "./lib/util"
 
+    levelNames = Object.keys(Levels)
+
     module.exports = (I={}, self=Core(I)) ->
       Object.defaults I,
         age: 0
-        levelName: "test"
+        levelName: "one"
         pins: [
           {}
         ]
@@ -44,16 +46,35 @@ Engine
 
       gameOver = false
 
+      fadeStart = -1
+      resetAt = 0
+      fadeEnd = 1
+
       self.extend
         resetLevel: ->
+          console.log "resettin"
           gameOver = false
           self.ball(null)
 
           # Reset pins
           self.pins Levels[self.levelName()]()
 
-        goToLevel: (n) ->
+        goToLevel: (name) ->
+          return if fadeStart
           
+          # TODO: AFTER COMPO: This is all gross
+          fadeStart = I.age
+          resetAt = I.age + 1
+          fadeEnd = I.age + 2
+
+          if name
+            # Jump to a level by name
+          else
+            nextIndex = levelNames.indexOf(I.levelName) + 1
+            name = levelNames[nextIndex]
+          
+          if name
+            I.levelName = name
 
         touch: (position) ->
           unless self.ball()
@@ -73,6 +94,7 @@ Engine
             startPosition = currentPosition = null
 
         fire: (start, target) ->
+          console.log "fire"
           self.ball Ball
             position: start
             velocity: target.subtract(start).norm getPower(start, target) * 1600 + 1
@@ -84,18 +106,25 @@ Engine
             self.pins()
 
         update: (dt) ->
+          if I.age > resetAt
+            resetAt = undefined
+            self.resetLevel()
+
+          if I.age > fadeEnd
+            fadeStart = fadeEnd = null
+
           unless gameOver
             self.processPhysics(self.objects(), dt)
-  
-            I.age += dt
   
             done = self.pins().reduce (done, pin) ->
               done and pin.hit()
             , true
 
             if done
-              gameOver = true
-              alert "A winner is you"
+              console.log "duneroo"
+              self.goToLevel() # Next level
+
+          I.age += dt
 
         draw: (canvas) ->
           canvas.fill("red")
@@ -138,6 +167,10 @@ Engine
           self.pins.forEach (pin) ->
             pin.draw(canvas)
 
+          if fadeStart
+            x = (I.age - fadeStart) / (fadeEnd - fadeStart) * 2
+            opacity = (-(x - 1) * (x - 1) + 1).clamp(0, 1)
+            canvas.fill "rgba(0, 0, 0, #{opacity.toFixed(8)})"
 
           if I.age < 5
             instructions.split("\n").map (text, i) ->
@@ -166,6 +199,6 @@ Engine
     
         return point
 
-      self.resetLevel()
+      self.goToLevel(I.levelName)
 
       return self
