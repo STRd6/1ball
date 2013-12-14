@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>ball</title>
+  <title>game_object</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
@@ -18,7 +18,7 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="ball">Ball</h1>
+              <h1 id="game-object">Game Object</h1>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -32,18 +32,50 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>The ball is what the player controls.</p>
-
+              
             </div>
-            <div class="content"><pre><code class="lang-coffeescript">GameObject = require <span class="string">"./game_object"</span>
+            <div class="content"><pre><code class="lang-coffeescript">Compositions = require <span class="string">"./lib/compositions"</span>
 
-module.<span class="function"><span class="title">exports</span></span> = (I={}, self) -&gt;
+module.<span class="function"><span class="title">exports</span></span> = (I={}, self=Core(I)) -&gt;
   Object.defaults I,
-    color: <span class="string">"blue"</span>
-    radius: <span class="number">64</span>
-    mass: <span class="number">10</span>
+    color: <span class="string">"white"</span>
+    velocity:
+      x: <span class="number">0</span>
+      y: <span class="number">0</span>
+    position:
+      x: <span class="number">0</span>
+      y: <span class="number">0</span>
+    radius: <span class="number">16</span>
+    mass: <span class="number">1</span>
 
-  self = GameObject(I)
+  self.include Compositions
+
+  self.attrAccessor <span class="string">"color"</span>, <span class="string">"mass"</span>, <span class="string">"radius"</span>
+
+  self.attrModel <span class="string">"velocity"</span>, Point
+  self.attrModel <span class="string">"position"</span>, Point
+
+  self.extend
+    draw: (canvas) -&gt;
+      p = self.position()
+      canvas.drawCircle
+        x: p.x
+        y: p.y
+        color: self.color()
+        radius: self.radius()
+
+    update: (dt) -&gt;
+
+    updatePosition: (dt) -&gt;
+      newPosition = self.position().add(self.velocity().scale(dt))
+      self.position(newPosition)
+      I.x = newPosition.x
+      I.y = newPosition.y
+
+    center: self.position
+
+    circle: -&gt;
+      I
 
   <span class="keyword">return</span> self</code></pre>
 </div>

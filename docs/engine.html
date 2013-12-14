@@ -38,19 +38,46 @@
 Hotkeys = require <span class="string">"./hotkeys"</span>
 
 Ball = require <span class="string">"./ball"</span>
+Pin = require <span class="string">"./pin"</span>
+Physics = require <span class="string">"./physics"</span>
 {Size} = require <span class="string">"./lib/util"</span>
 
 module.<span class="function"><span class="title">exports</span></span> = (I={}, self=Core(I)) -&gt;
   Object.defaults I,
     age: <span class="number">0</span>
+    pins: [
+      {
+        position:
+          x: <span class="number">200</span>
+          y: <span class="number">200</span>
+      }
+    ]
 
   self.include Compositions
   self.include Hotkeys
+  self.include Physics
 
   self.attrAccessor <span class="string">"age"</span>
 
   self.attrModel <span class="string">"ball"</span>, Ball
   self.attrModel <span class="string">"size"</span>, Size
+  self.attrModels <span class="string">"pins"</span>, Pin
+
+  instructions = <span class="string">"""
+    Click and Drag
+
+    'r' to Restart Level
+  """</span>
+
+  pins = []
+  <span class="number">10.</span>times (x) -&gt;
+    <span class="number">10.</span>times (y) -&gt;
+      pins.push Pin
+        position:
+          x: <span class="number">50</span> * x
+          y: <span class="number">50</span> * y
+
+  self.pins pins
 
   startPosition = currentPosition = <span class="literal">null</span>
 
@@ -64,6 +91,9 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
       self.ball(<span class="literal">null</span>)
 
       <span class="comment"># TODO: Reset pins</span>
+
+    goToLevel: (n) -&gt;
+
 
     touch: (position) -&gt;
       <span class="keyword">unless</span> self.ball()
@@ -85,8 +115,14 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         position: start
         velocity: target.subtract(start).norm getPower(start, target) * <span class="number">1600</span> + <span class="number">1</span>
 
+    objects: -&gt;
+      <span class="keyword">if</span> self.ball()
+        self.pins().concat(self.ball())
+      <span class="keyword">else</span>
+        self.pins()
+
     update: (dt) -&gt;
-      self.ball()?.update(dt)
+      self.processPhysics(self.objects(), dt)
 
       I.age += dt
 
@@ -113,6 +149,9 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
           color: <span class="string">"white"</span>
           position: currentPosition
           text: (power * <span class="number">100</span>).toFixed(<span class="number">2</span>)
+
+      self.pins.forEach (pin) -&gt;
+        pin.draw(canvas)
 
       <span class="keyword">if</span> self.ball()
         self.ball().draw canvas</code></pre>

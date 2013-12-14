@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>physics</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    <ul class="sections">
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="physics">Physics</h1>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">Collision = require <span class="string">"./lib/collision"</span></code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Stolen from Red Ice: <a href="https://raw.github.com/PixieEngine/RedIce/pixie/src/physics.coffee">https://raw.github.com/PixieEngine/RedIce/pixie/src/physics.coffee</a></p>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">module.<span class="function"><span class="title">exports</span></span> = (I={}, self) -&gt;
+  <span class="function"><span class="title">resolveCollision</span></span> = (A, B) -&gt;
+    normal = B.center().subtract(A.center()).norm()
+
+    <span class="comment"># Elastic collisions</span>
+    relativeVelocity = A.velocity().subtract(B.velocity())
+
+    massA = A.mass()
+    massB = B.mass()
+
+    totalMass = massA + massB
+
+    pushA = normal.scale(-<span class="number">2</span> * (relativeVelocity.dot(normal) * (massB / totalMass)))
+    pushB = normal.scale(+<span class="number">2</span> * (relativeVelocity.dot(normal) * (massA / totalMass)))
+
+    <span class="comment"># Adding impulse</span>
+    A.velocity A.velocity().add(pushA)
+    B.velocity B.velocity().add(pushB)
+
+  <span class="function"><span class="title">resolveCollisions</span></span> = (objects) -&gt;
+    objects.eachPair (a, b) -&gt;
+
+      <span class="keyword">if</span> Collision.circular(a.circle(), b.circle())
+        resolveCollision(a, b)
+
+  self.extend
+    processPhysics: (objects, dt, steps=<span class="number">2</span>) -&gt;  
+      dt /= steps
+
+      steps.times -&gt;
+        objects.invoke <span class="string">"updatePosition"</span>, dt
+
+        resolveCollisions(objects, dt)</code></pre>
+</div>
+        </li>
+        
+    </ul>
+  </div>
+  <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script>
+<script src="http://strd6.github.io/require/v0.2.2.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://strd6.github.io/tempest/javascripts/envweb-v0.4.5.js"></script><script>
+  $.ajax({
+    url: "http://strd6.github.io/interactive/v0.8.1.jsonp",
+    dataType: "jsonp",
+    jsonpCallback: "STRd6/interactive:v0.8.1",
+    cache: true
+  }).then(function(PACKAGE) {
+    Require.generateFor(PACKAGE)("./" + PACKAGE.entryPoint)
+  })
+</script><script src="package.js"></script>
+</body>
+</html>
