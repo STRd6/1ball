@@ -343,7 +343,7 @@ Levels
         ]).concat invisible incorporeal big [
           Point(0.75, 0.75)
         ]
-    }, { # Ossilators 6 levels
+    }, { # Ossilators 7 levels
       "|": ->
         osscilate incorporeal big [
           Point(0.5, 0.5)
@@ -385,6 +385,14 @@ Levels
         ]), -1).concat small [
           Point(0.35, 0.5)
         ]
+      "⚃": ->
+        osscilate(incorporeal(small [
+          Point(0.25, 0.25)
+          Point(0.25, 0.75)
+        ].map restoreAspect), -1).concat immobile big [
+          Point(0.75, 0.25)
+          Point(0.75, 0.75)
+        ].map restoreAspect
     }, { # Bonus town 8 levels
       ":)": ->
         map(semiCircle()).concat big [
