@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>lib/music</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    <ul class="sections">
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="music">Music</h1>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>The Music object provides an easy API to play
+songs from your sounds project directory. By
+default, the track is looped.</p>
+<blockquote>
+<pre><code>Music.play(&#39;intro_theme&#39;)     </code></pre>
+</blockquote>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">module.exports = Music = <span class="keyword">do</span> -&gt;
+  <span class="comment"># TODO: Load this from local storage of user preferences</span>
+  globalMusicVolume = <span class="number">1</span>
+  trackVolume = <span class="number">1</span>
+
+  <span class="comment"># TODO: Allow configuration of base path</span>
+  <span class="comment"># TODO: Figure out audio resources</span>
+  basePath = <span class="string">"http://strd6.github.io/cdn/assets/"</span>
+
+  <span class="comment"># TODO: Remove jQuery dependency</span>
+  track = $ <span class="string">"&lt;audio /&gt;"</span>,
+    <span class="keyword">loop</span>: <span class="string">"loop"</span>
+  .appendTo(<span class="string">'body'</span>).get(<span class="number">0</span>)
+
+  <span class="function"><span class="title">appendSources</span></span> = (audio, name) -&gt;
+    [
+      [<span class="string">"ogg"</span>, <span class="string">"audio/ogg"</span>]
+      [<span class="string">"mp3"</span>, <span class="string">"audio/mpeg"</span>]
+    ].forEach ([extension, mimeType]) -&gt;
+      source = document.createElement(<span class="string">'source'</span>)
+      source.type = mimeType
+      source.src = <span class="string">"<span class="subst">#{basePath}</span><span class="subst">#{name}</span>.<span class="subst">#{extension}</span>"</span>
+      audio.appendChild(source)
+
+  <span class="function"><span class="title">updateTrackVolume</span></span> = -&gt;
+    track.volume = globalMusicVolume * trackVolume</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Set the global volume modifier for all music.</p>
+<p>Any value set is clamped between 0 and 1. This is multiplied
+into each individual track that plays.</p>
+<p>If no argument is given return the current global music volume.</p>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">  globalVolume: (newVolume) -&gt;
+    <span class="keyword">if</span> newVolume?
+      globalMusicVolume = newVolume.clamp(<span class="number">0</span>, <span class="number">1</span>)
+
+      updateTrackVolume()
+
+    <span class="keyword">return</span> globalMusicVolume</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Plays a music track.</p>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">  play: (name) -&gt;
+    updateTrackVolume()
+
+    appendSources(track, name)
+
+    track.play()</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Get or set the current music volume. Any value passed is
+clamped between 0 and 1. Use this to adjust the volume of
+individual tracks or to increase or decrease volume during
+gameplay.</p>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">  volume: (newVolume) -&gt;
+    <span class="keyword">if</span> newVolume?
+      trackVolume = newVolume.clamp(<span class="number">0</span>, <span class="number">1</span>)
+      updateTrackVolume()
+
+      <span class="keyword">return</span> <span class="keyword">this</span>
+    <span class="keyword">else</span>
+      <span class="keyword">return</span> trackVolume</code></pre>
+</div>
+        </li>
+        
+    </ul>
+  </div>
+  <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script>
+<script src="http://strd6.github.io/require/v0.2.2.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://strd6.github.io/tempest/javascripts/envweb-v0.4.5.js"></script><script>
+  $.ajax({
+    url: "http://strd6.github.io/interactive/v0.8.1.jsonp",
+    dataType: "jsonp",
+    jsonpCallback: "STRd6/interactive:v0.8.1",
+    cache: true
+  }).then(function(PACKAGE) {
+    Require.generateFor(PACKAGE)("./" + PACKAGE.entryPoint)
+  })
+</script><script src="../package.js"></script>
+</body>
+</html>

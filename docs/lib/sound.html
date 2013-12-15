@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>lib/sound</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    <ul class="sections">
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="sound">Sound</h1>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>A simple interface for playing sounds in games.</p>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">format = <span class="string">"wav"</span>
+sounds = {}
+globalVolume = <span class="number">1</span>
+
+<span class="comment"># TODO: Allow configuration of base path</span>
+<span class="comment"># TODO: Figure out audio resources</span>
+basePath = <span class="string">"http://strd6.github.io/cdn/assets/"</span>
+
+<span class="function"><span class="title">loadSoundChannel</span></span> = (name) -&gt;
+  url = <span class="string">"<span class="subst">#{basePath}</span>/<span class="subst">#{name}</span>.<span class="subst">#{format}</span>"</span>
+
+  <span class="comment"># TODO: Remove jQuery dependency</span>
+  sound = $(<span class="string">'&lt;audio /&gt;'</span>,
+    autobuffer: <span class="literal">true</span>
+    preload: <span class="string">'auto'</span>
+    src: url
+  ).get(<span class="number">0</span>)
+
+module.exports = <span class="function"><span class="title">Sound</span></span> = (id, maxChannels) -&gt;
+  play: -&gt;
+    Sound.play(id, maxChannels)
+
+  stop: -&gt;
+    Sound.stop(id)
+
+Object.extend Sound,</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Set the global volume modifier for all sound effects.</p>
+<p>Any value set is clamped between 0 and 1. This is multiplied
+into each individual effect that plays.</p>
+<p>If no argument is given return the current global sound effect volume.</p>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">  volume: (newVolume) -&gt;
+    <span class="keyword">if</span> newVolume?
+      globalVolume = newVolume.clamp(<span class="number">0</span>, <span class="number">1</span>)
+
+    <span class="keyword">return</span> globalVolume</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Play a sound from your sounds directory with the given name.</p>
+<blockquote>
+<pre><code># plays a sound called explode from your sounds directory
+Sound.play(&#39;explode&#39;)</code></pre>
+</blockquote>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">  play: (id, maxChannels) -&gt;
+    <span class="comment"># TODO: Too many channels crash Chrome!!!1</span>
+    maxChannels ||= <span class="number">4</span>
+
+    <span class="keyword">unless</span> sounds[id]
+      sounds[id] = [loadSoundChannel(id)]
+
+    channels = sounds[id]
+
+    freeChannels = channels.select (sound) -&gt;
+      sound.currentTime == sound.duration || sound.currentTime == <span class="number">0</span>
+
+    <span class="keyword">if</span> channel = freeChannels.first()
+      <span class="keyword">try</span>
+        channel.currentTime = <span class="number">0</span>
+
+      channel.volume = globalVolume
+      channel.play()
+    <span class="keyword">else</span>
+      <span class="keyword">if</span> !maxChannels || channels.length &lt; maxChannels
+        sound = loadSoundChannel(id)
+        channels.push(sound)
+        sound.play()
+        sound.volume = globalVolume</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Play a sound from the given url.</p>
+<blockquote>
+<pre><code>Sound.playFromUrl(&#39;http://YourSoundWebsite.com/explode.wav&#39;)</code></pre>
+</blockquote>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">  playFromUrl: (url) -&gt;
+    sound = $(<span class="string">'&lt;audio /&gt;'</span>).get(<span class="number">0</span>)
+    sound.src = url
+
+    sound.play()
+    sound.volume = globalVolume
+
+    <span class="keyword">return</span> sound</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Stop a sound while it is playing.</p>
+<blockquote>
+<pre><code>Sound.stop(&#39;explode&#39;)</code></pre>
+</blockquote>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">  stop: (id) -&gt;
+    sounds[id]?.stop()</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Set the global volume modifier for all sound effects.</p>
+<p>Any value set is clamped between 0 and 1. This is multiplied
+into each individual effect that plays.</p>
+<p>If no argument is given return the current global sound effect volume.</p>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">Sound.globalVolume = Sound.volume</code></pre>
+</div>
+        </li>
+        
+    </ul>
+  </div>
+  <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script>
+<script src="http://strd6.github.io/require/v0.2.2.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://strd6.github.io/tempest/javascripts/envweb-v0.4.5.js"></script><script>
+  $.ajax({
+    url: "http://strd6.github.io/interactive/v0.8.1.jsonp",
+    dataType: "jsonp",
+    jsonpCallback: "STRd6/interactive:v0.8.1",
+    cache: true
+  }).then(function(PACKAGE) {
+    Require.generateFor(PACKAGE)("./" + PACKAGE.entryPoint)
+  })
+</script><script src="../package.js"></script>
+</body>
+</html>

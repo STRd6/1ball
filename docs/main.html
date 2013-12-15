@@ -36,12 +36,15 @@
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">require <span class="string">"./setup"</span>
+Music = require <span class="string">"./lib/music"</span>
 Canvas = require <span class="string">"touch-canvas"</span>
 {Size, Bounds} = require <span class="string">"./lib/util"</span>
 Engine = require <span class="string">"./engine"</span>
 
 FPS = <span class="number">60</span>
 dt = <span class="number">1</span>/FPS
+
+Music.play <span class="string">"music"</span>
 
 size = Size
   width: <span class="number">1024</span>

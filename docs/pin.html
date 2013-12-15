@@ -58,6 +58,7 @@ Portal - Transports entities through it</p>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">GameObject = require <span class="string">"./game_object"</span>
+Sound = require <span class="string">"./lib/sound"</span>
 
 module.<span class="function"><span class="title">exports</span></span> = (I={}) -&gt;
   Object.defaults I,
@@ -75,6 +76,8 @@ module.<span class="function"><span class="title">exports</span></span> = (I={})
     collided: (other) -&gt;
       self.hit <span class="literal">true</span>
       self.color <span class="string">"yellow"</span>
+
+      Sound.play(<span class="string">"hit<span class="subst">#{rand(<span class="number">4</span>)}</span>"</span>)
 
     update: (dt) -&gt;
       I.age += dt
