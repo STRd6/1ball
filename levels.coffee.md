@@ -126,6 +126,9 @@ Levels
           Point(0.75, 0.75)
         ].map restoreAspect
 
+      "○": ->
+        big circle(12)
+        
       "⬡": ->
         positions = circle(6)
         positions.splice(1, 1)
@@ -172,6 +175,8 @@ Levels
           Point(0.25, 0.75)
           Point(0.75, 0.75)
         ].map restoreAspect
+      "○": ->
+        small circle(30)
     }, { # Immobile Chapter
       "⚀": ->
         immobile small [
@@ -182,7 +187,7 @@ Levels
           Point(0.25, 0.75)
           Point(0.75, 0.25)
         ].map restoreAspect
-      "3": ->
+      "three": ->
         immobile small [
           Point(0.25, 0.5)
           Point(0.5, 0.25)
@@ -206,19 +211,24 @@ Levels
           Point(0.25, 0.5)
           Point(0.75, 0.5)
         ].map restoreAspect
+        
       "⬡": ->
         immobile small circle(6)
+      
+
     }, { # Incorporeal
       "⚀": ->
         incorporeal big [
           Point(0.5, 0.5)
         ]
+
       "⋯": ->
         incorporeal big [
           Point(0.25, 0.5)
           Point(0.5, 0.5)
           Point(0.75, 0.5)
         ]
+
       "⚁": ->
         incorporeal big [
           Point(0.25, 0.75)
@@ -232,6 +242,24 @@ Levels
           Point(0.75, 0.25)
         ].map restoreAspect
 
+      "Y": ->
+        incorporeal(big [
+          Point(0.3, 0.5)
+          Point(0.8, 0.2)
+          Point(0.8, 0.8)
+        ]).concat big [
+          Point(0.6, 0.5)
+        ]
+
+      "⚃": ->
+        incorporeal(big [
+          Point(0.25, 0.25)
+          Point(0.25, 0.75)
+        ].map restoreAspect).concat immobile big [
+          Point(0.75, 0.25)
+          Point(0.75, 0.75)
+        ].map restoreAspect
+        
       ">": ->
         incorporeal(big [
           Point(0.25, 0.25)
@@ -249,6 +277,7 @@ Levels
           Point(0.15, 0.15)
           Point(0.15, 0.85)
         ]
+
     }, { # Invisible chapter
       "⚀": ->
         invisible big [
@@ -305,30 +334,58 @@ Levels
           Point(0.75, 0.75)
         ].map restoreAspect
 
-      "⬡": ->
-        positions = circle(6)
-        positions.splice(1, 1)
+      "○": ->
+        invisible big circle(12)
 
-        invisible big positions
-    }, {
       "⚀?": ->
         big([
           Point(0.5, 0.5)
         ]).concat invisible incorporeal big [
           Point(0.75, 0.75)
         ]
-      "∿": ->
+    }, { # Ossilators
+      "|": ->
         osscilate incorporeal big [
-          Point(0.2, 0.5)
+          Point(0.5, 0.5)
+        ]
+
+      "||": ->
+        osscilate incorporeal(big [
+          Point(0.75, 0.5)
+          Point(0.25, 0.5)
+        ]), -1
+      "☆NSYNC": ->
+        osscilate incorporeal(big [
+          Point(0.75, 0.5)
+          Point(0.25, 0.5)
+        ]), 0
+      "|||": ->
+        osscilate incorporeal(big [
+          Point(0.75, 0.5)
+          Point(0.5, 0.5)
+          Point(0.25, 0.5)
+        ]), -1
+
+      "∿": ->
+        osscilate incorporeal(big [
           Point(0.3, 0.5)
           Point(0.4, 0.5)
           Point(0.5, 0.5)
           Point(0.6, 0.5)
           Point(0.7, 0.5)
-          Point(0.8, 0.5)
-          Point(0.9, 0.5)
+        ]), -0.2
+      "☄": ->
+        osscilate(incorporeal(big [
+          Point(0.75, 0.5)
+          Point(0.75, 0.5)
+          Point(0.5, 0.5)
+          Point(0.5, 0.5)
+          Point(0.25, 0.5)
+          Point(0.25, 0.5)
+        ]), -1).concat small [
+          Point(0.35, 0.5)
         ]
-    }, { # Chapter 3
+    }, { # Bonus town
       ":)": ->
         map(semiCircle()).concat big [
           Point(0.4, 0.33)
@@ -337,6 +394,14 @@ Levels
 
       "◎": ->
         map(circle(24)).concat(big [Point(0.5, 0.5)])
+
+      "☆NSYNC Reunion Tour 2014?": ->
+        osscilate(incorporeal(big [
+          Point(0.75, 0.5)
+          Point(0.25, 0.5)
+        ]), 0).concat invisible incorporeal small [
+          Point(0.9, 0.9)
+        ]
 
       "✝": ->
         map [
@@ -348,11 +413,14 @@ Levels
           Point(0.5, 0.8)
         ].map restoreAspect
 
+      "○": ->
+        pins = immobile small circle(30)
+        pins.splice(14, 3)
+
+        pins
+
       "⬡": ->
         small circle(6)
-        
-      "○": ->
-        map circle(24)
 
       "⬭": -> # Not solved yet
         small circle(24, 0.3, true)
@@ -365,3 +433,14 @@ Levels
           Point(0.75, 0.75)
         ].map restoreAspect
     }]
+
+    scraps =
+      "☈": ->
+        immobile(small [
+          Point(0.9, 0.5)
+        ]).concat big [
+          Point(0.2, 0.2)
+          Point(0.2, 0.8)
+          Point(0.8, 0.2)
+          Point(0.8, 0.8)
+        ].map restoreAspect

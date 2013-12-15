@@ -38,9 +38,10 @@ Stolen from Red Ice: https://raw.github.com/PixieEngine/RedIce/pixie/src/physics
         objects.eachPair (a, b) ->
 
           if Collision.circular(a.circle(), b.circle())
-            resolveCollision(a, b)
-            a.collided(b)
-            b.collided(a)
+            unless (a.incorporeal() and b.incorporeal())
+              resolveCollision(a, b)
+              a.collided(b)
+              b.collided(a)
 
       self.extend
         processPhysics: (objects, dt, steps=2) ->  

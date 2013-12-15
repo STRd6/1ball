@@ -217,7 +217,7 @@ Engine
             canvas.centerText
               color: "white"
               position: currentPosition
-              text: "#{startPosition.y} #{angle.toFixed(2)}τ"
+              text: "#{startPosition.y} #{angle.toFixed(4)}τ"
           else if self.ball()
             self.ball().draw canvas
           else if mousePosition
