@@ -40,6 +40,7 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
   Object.defaults I,
     color: <span class="string">"white"</span>
     immobile: <span class="literal">false</span>
+    incorporeal: <span class="literal">false</span>
     velocity:
       x: <span class="number">0</span>
       y: <span class="number">0</span>
@@ -51,7 +52,7 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
 
   self.include Compositions
 
-  self.attrAccessor <span class="string">"color"</span>, <span class="string">"immobile"</span>, <span class="string">"mass"</span>, <span class="string">"radius"</span>
+  self.attrAccessor <span class="string">"color"</span>, <span class="string">"immobile"</span>, <span class="string">"incorporeal"</span>, <span class="string">"mass"</span>, <span class="string">"radius"</span>
 
   self.attrModel <span class="string">"velocity"</span>, Point
   self.attrModel <span class="string">"position"</span>, Point
