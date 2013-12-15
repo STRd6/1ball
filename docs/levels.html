@@ -159,6 +159,9 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ].map restoreAspect
 
+  <span class="string">"○"</span>: -&gt;
+    big circle(<span class="number">12</span>)
+
   <span class="string">"⬡"</span>: -&gt;
     positions = circle(<span class="number">6</span>)
     positions.splice(<span class="number">1</span>, <span class="number">1</span>)
@@ -205,6 +208,8 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ].map restoreAspect
+  <span class="string">"○"</span>: -&gt;
+    small circle(<span class="number">30</span>)
 }, { <span class="comment"># Immobile Chapter</span>
   <span class="string">"⚀"</span>: -&gt;
     immobile small [
@@ -215,7 +220,7 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
     ].map restoreAspect
-  <span class="string">"3"</span>: -&gt;
+  <span class="string">"three"</span>: -&gt;
     immobile small [
       Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.25</span>)
@@ -239,19 +244,24 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
     ].map restoreAspect
+
   <span class="string">"⬡"</span>: -&gt;
     immobile small circle(<span class="number">6</span>)
+
+
 }, { <span class="comment"># Incorporeal</span>
   <span class="string">"⚀"</span>: -&gt;
     incorporeal big [
       Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
     ]
+
   <span class="string">"⋯"</span>: -&gt;
     incorporeal big [
       Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
     ]
+
   <span class="string">"⚁"</span>: -&gt;
     incorporeal big [
       Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
@@ -263,6 +273,24 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
+    ].map restoreAspect
+
+  <span class="string">"Y"</span>: -&gt;
+    incorporeal(big [
+      Point(<span class="number">0.3</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.8</span>, <span class="number">0.2</span>)
+      Point(<span class="number">0.8</span>, <span class="number">0.8</span>)
+    ]).concat big [
+      Point(<span class="number">0.6</span>, <span class="number">0.5</span>)
+    ]
+
+  <span class="string">"⚃"</span>: -&gt;
+    incorporeal(big [
+      Point(<span class="number">0.25</span>, <span class="number">0.25</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
+    ].map restoreAspect).concat immobile big [
+      Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
+      Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ].map restoreAspect
 
   <span class="string">"&gt;"</span>: -&gt;
@@ -282,6 +310,7 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.15</span>, <span class="number">0.15</span>)
       Point(<span class="number">0.15</span>, <span class="number">0.85</span>)
     ]
+
 }, { <span class="comment"># Invisible chapter</span>
   <span class="string">"⚀"</span>: -&gt;
     invisible big [
@@ -338,30 +367,58 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ].map restoreAspect
 
-  <span class="string">"⬡"</span>: -&gt;
-    positions = circle(<span class="number">6</span>)
-    positions.splice(<span class="number">1</span>, <span class="number">1</span>)
+  <span class="string">"○"</span>: -&gt;
+    invisible big circle(<span class="number">12</span>)
 
-    invisible big positions
-}, {
   <span class="string">"⚀?"</span>: -&gt;
     big([
       Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
     ]).concat invisible incorporeal big [
       Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ]
-  <span class="string">"∿"</span>: -&gt;
+}, { <span class="comment"># Ossilators</span>
+  <span class="string">"|"</span>: -&gt;
     osscilate incorporeal big [
-      Point(<span class="number">0.2</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
+    ]
+
+  <span class="string">"||"</span>: -&gt;
+    osscilate incorporeal(big [
+      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+    ]), -<span class="number">1</span>
+  <span class="string">"☆NSYNC"</span>: -&gt;
+    osscilate incorporeal(big [
+      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+    ]), <span class="number">0</span>
+  <span class="string">"|||"</span>: -&gt;
+    osscilate incorporeal(big [
+      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+    ]), -<span class="number">1</span>
+
+  <span class="string">"∿"</span>: -&gt;
+    osscilate incorporeal(big [
       Point(<span class="number">0.3</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.4</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.6</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.7</span>, <span class="number">0.5</span>)
-      Point(<span class="number">0.8</span>, <span class="number">0.5</span>)
-      Point(<span class="number">0.9</span>, <span class="number">0.5</span>)
+    ]), -<span class="number">0.2</span>
+  <span class="string">"☄"</span>: -&gt;
+    osscilate(incorporeal(big [
+      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+    ]), -<span class="number">1</span>).concat small [
+      Point(<span class="number">0.35</span>, <span class="number">0.5</span>)
     ]
-}, { <span class="comment"># Chapter 3</span>
+}, { <span class="comment"># Bonus town</span>
   <span class="string">":)"</span>: -&gt;
     map(semiCircle()).concat big [
       Point(<span class="number">0.4</span>, <span class="number">0.33</span>)
@@ -370,6 +427,14 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
 
   <span class="string">"◎"</span>: -&gt;
     map(circle(<span class="number">24</span>)).concat(big [Point(<span class="number">0.5</span>, <span class="number">0.5</span>)])
+
+  <span class="string">"☆NSYNC Reunion Tour 2014?"</span>: -&gt;
+    osscilate(incorporeal(big [
+      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+    ]), <span class="number">0</span>).concat invisible incorporeal small [
+      Point(<span class="number">0.9</span>, <span class="number">0.9</span>)
+    ]
 
   <span class="string">"✝"</span>: -&gt;
     map [
@@ -381,11 +446,14 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.5</span>, <span class="number">0.8</span>)
     ].map restoreAspect
 
+  <span class="string">"○"</span>: -&gt;
+    pins = immobile small circle(<span class="number">30</span>)
+    pins.splice(<span class="number">14</span>, <span class="number">3</span>)
+
+    pins
+
   <span class="string">"⬡"</span>: -&gt;
     small circle(<span class="number">6</span>)
-
-  <span class="string">"○"</span>: -&gt;
-    map circle(<span class="number">24</span>)
 
   <span class="string">"⬭"</span>: -&gt; <span class="comment"># Not solved yet</span>
     small circle(<span class="number">24</span>, <span class="number">0.3</span>, <span class="literal">true</span>)
@@ -397,7 +465,18 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ].map restoreAspect
-}]</code></pre>
+}]
+
+scraps =
+  <span class="string">"☈"</span>: -&gt;
+    immobile(small [
+      Point(<span class="number">0.9</span>, <span class="number">0.5</span>)
+    ]).concat big [
+      Point(<span class="number">0.2</span>, <span class="number">0.2</span>)
+      Point(<span class="number">0.2</span>, <span class="number">0.8</span>)
+      Point(<span class="number">0.8</span>, <span class="number">0.2</span>)
+      Point(<span class="number">0.8</span>, <span class="number">0.8</span>)
+    ].map restoreAspect</code></pre>
 </div>
         </li>
         
