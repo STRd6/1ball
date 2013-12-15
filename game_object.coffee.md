@@ -6,6 +6,7 @@ Game Object
     module.exports = (I={}, self=Core(I)) ->
       Object.defaults I,
         color: "white"
+        immobile: false
         velocity:
           x: 0
           y: 0
@@ -17,7 +18,7 @@ Game Object
 
       self.include Compositions
 
-      self.attrAccessor "color", "mass", "radius"
+      self.attrAccessor "color", "immobile", "mass", "radius"
 
       self.attrModel "velocity", Point
       self.attrModel "position", Point

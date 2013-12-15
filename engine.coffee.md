@@ -10,11 +10,12 @@ Engine
     Physics = require "./physics"
     {Size} = require "./lib/util"
 
+    # ⚀
     module.exports = (I={}, self=Core(I)) ->
       Object.defaults I,
         age: 0
         chapter: 0
-        levelName: "⚀" #levelNames.last()
+        levelName: "⚀"
         pins: [
           {}
         ]
