@@ -51,6 +51,7 @@
               <p>Normal - Have mass and physics
 Big Ones
 Light - Must be triggered by overlap, but don&#39;t have any physical effects
+Invisible
 Bumper - Immovable
 Exploders - Split into multiple
 Portal - Transports entities through it</p>
@@ -61,11 +62,10 @@ Portal - Transports entities through it</p>
 module.<span class="function"><span class="title">exports</span></span> = (I={}) -&gt;
   Object.defaults I,
     hit: <span class="literal">false</span>
-    immobile: <span class="literal">false</span>
 
   self = GameObject(I)
 
-  self.attrAccessor <span class="string">"hit"</span>, <span class="string">"immobile"</span>
+  self.attrAccessor <span class="string">"hit"</span>
 
   self.extend
     collided: (other) -&gt;

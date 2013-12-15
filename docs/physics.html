@@ -59,8 +59,15 @@
 
     totalMass = massA + massB
 
-    pushA = normal.scale(-<span class="number">2</span> * (relativeVelocity.dot(normal) * (massB / totalMass)))
-    pushB = normal.scale(+<span class="number">2</span> * (relativeVelocity.dot(normal) * (massA / totalMass)))
+    <span class="keyword">if</span> A.immobile()
+      pushA = Point(<span class="number">0</span>, <span class="number">0</span>)
+      pushB = normal.scale(+<span class="number">2</span> * (relativeVelocity.dot(normal)))
+    <span class="keyword">else</span> <span class="keyword">if</span> B.immobile()
+      pushA = normal.scale(-<span class="number">2</span> * (relativeVelocity.dot(normal)))
+      pushB = Point(<span class="number">0</span>, <span class="number">0</span>)
+    <span class="keyword">else</span>
+      pushA = normal.scale(-<span class="number">2</span> * (relativeVelocity.dot(normal) * (massB / totalMass)))
+      pushB = normal.scale(+<span class="number">2</span> * (relativeVelocity.dot(normal) * (massA / totalMass)))
 
     <span class="comment"># Adding impulse</span>
     A.velocity A.velocity().add(pushA)
