@@ -134,7 +134,7 @@ Levels
         positions.splice(1, 1)
 
         big positions
-    }, { # Chapter 2
+    }, { # Chapter 2, 8 Levels
       "⚀": ->
         small [
           Point(0.5, 0.5)
@@ -177,7 +177,7 @@ Levels
         ].map restoreAspect
       "○": ->
         small circle(30)
-    }, { # Immobile Chapter
+    }, { # Immobile Chapter 7 levels
       "⚀": ->
         immobile small [
           Point(0.5, 0.5)
@@ -216,7 +216,7 @@ Levels
         immobile small circle(6)
       
 
-    }, { # Incorporeal
+    }, { # Incorporeal 8 levels
       "⚀": ->
         incorporeal big [
           Point(0.5, 0.5)
@@ -278,7 +278,7 @@ Levels
           Point(0.15, 0.85)
         ]
 
-    }, { # Invisible chapter
+    }, { # Invisible chapter 10 levels
       "⚀": ->
         invisible big [
           Point(0.5, 0.5)
@@ -343,7 +343,7 @@ Levels
         ]).concat invisible incorporeal big [
           Point(0.75, 0.75)
         ]
-    }, { # Ossilators
+    }, { # Ossilators 6 levels
       "|": ->
         osscilate incorporeal big [
           Point(0.5, 0.5)
@@ -385,7 +385,7 @@ Levels
         ]), -1).concat small [
           Point(0.35, 0.5)
         ]
-    }, { # Bonus town
+    }, { # Bonus town 8 levels
       ":)": ->
         map(semiCircle()).concat big [
           Point(0.4, 0.33)
