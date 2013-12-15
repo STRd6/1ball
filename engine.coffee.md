@@ -57,6 +57,7 @@ Engine
       fadeEnd = 1
 
       resetCount = 0
+      skippableAt = 7
       
       outOfBounds = (object) ->
         p = object.position()
@@ -116,7 +117,7 @@ Engine
 
         touch: (position) ->
           # Check for skip button
-          if p = position.scale(self.size())
+          if (p = position.scale(self.size())) and (resetCount >= skippableAt)
             if 0 <= p.x <= 100
               if 0 <= p.y <= 30
                 self.goToLevel() # Skip it!
@@ -231,7 +232,7 @@ Engine
             opacity = (-(x - 1) * (x - 1) + 1).clamp(0, 1)
             canvas.fill "rgba(0, 0, 0, #{opacity.toFixed(8)})"
           
-          if resetCount >= 10
+          if resetCount >= skippableAt
             fontSize = 32 + 6 * Math.sin(self.age() * 1.5 * Math.TAU)
             canvas.font "#{fontSize}px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"
 
