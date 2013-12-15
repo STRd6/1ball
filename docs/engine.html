@@ -148,6 +148,12 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         alert <span class="string">"a winner is you"</span>
 
     touch: (position) -&gt;
+      <span class="comment"># Check for skip button</span>
+      <span class="keyword">if</span> p = position.scale(self.size())
+        <span class="keyword">if</span> <span class="number">0</span> &lt;= p.x &lt;= <span class="number">100</span>
+          <span class="keyword">if</span> <span class="number">0</span> &lt;= p.y &lt;= <span class="number">30</span>
+            self.goToLevel() <span class="comment"># Skip it!</span>
+
       <span class="keyword">unless</span> self.ball()
         startPosition = currentPosition = position.scale(self.size())
 
@@ -185,6 +191,7 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
     update: (dt) -&gt;
       <span class="keyword">if</span> I.age &gt; resetAt
         resetAt = <span class="literal">undefined</span>
+        resetCount = <span class="number">0</span>
         self.resetLevel()
 
       <span class="keyword">if</span> I.age &gt; fadeEnd
@@ -256,6 +263,16 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         x = (I.age - fadeStart) / (fadeEnd - fadeStart) * <span class="number">2</span>
         opacity = (-(x - <span class="number">1</span>) * (x - <span class="number">1</span>) + <span class="number">1</span>).clamp(<span class="number">0</span>, <span class="number">1</span>)
         canvas.fill <span class="string">"rgba(0, 0, 0, <span class="subst">#{opacity.toFixed(<span class="number">8</span>)}</span>)"</span>
+
+      <span class="keyword">if</span> resetCount &gt;= <span class="number">10</span>
+        fontSize = <span class="number">32</span> + <span class="number">6</span> * Math.sin(self.age() * <span class="number">1.5</span> * Math.TAU)
+        canvas.font <span class="string">"<span class="subst">#{fontSize}</span>px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
+
+        canvas.drawText
+          position:
+            x: <span class="number">10</span>
+            y: <span class="number">30</span>
+          text: <span class="string">"Skip"</span>
 
       <span class="keyword">if</span> I.age &lt; <span class="number">5</span>
         self.drawMessage instructions, canvas
