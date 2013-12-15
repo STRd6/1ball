@@ -79,9 +79,7 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
   startPosition = currentPosition = <span class="literal">null</span>
 
   <span class="function"><span class="title">getPower</span></span> = (a, b) -&gt;
-    p = Point.distance(a, b) / <span class="number">200</span>
-
-    p.clamp <span class="number">0</span>, <span class="number">1</span>
+    <span class="number">1</span>
 
   gameOver = <span class="literal">false</span>
 
@@ -158,7 +156,7 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
       <span class="keyword">unless</span> self.ball()
         startPosition = currentPosition = position.scale(self.size())
 
-        startPosition.x = startPosition.x.clamp(<span class="number">0</span>, I.startZone)
+        startPosition.x = I.startZone
 
     move: (position) -&gt;
       currentPosition = position.scale(self.size())
@@ -230,6 +228,9 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
         height: self.size().height
         color: <span class="string">"gray"</span>
 
+      fontSize = <span class="number">32</span> + <span class="number">6</span> * Math.sin(self.age() * <span class="number">1.5</span> * Math.TAU)
+      canvas.font <span class="string">"<span class="subst">#{fontSize}</span>px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
+
       <span class="keyword">if</span> startPosition
         power = getPower(startPosition, currentPosition)
 
@@ -244,12 +245,12 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
           end: currentPosition
           color: <span class="string">"black"</span>
 
-        fontSize = <span class="number">32</span> + <span class="number">6</span> * Math.sin(self.age() * <span class="number">1.5</span> * Math.TAU)
-        canvas.font <span class="string">"<span class="subst">#{fontSize}</span>px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"</span>
+        angle = Point.direction(startPosition, currentPosition)/Math.TAU
+
         canvas.centerText
           color: <span class="string">"white"</span>
           position: currentPosition
-          text: (power * <span class="number">100</span>).toFixed(<span class="number">2</span>)
+          text: <span class="string">"<span class="subst">#{startPosition.y}</span> <span class="subst">#{angle.toFixed(<span class="number">2</span>)}</span>τ"</span>
       <span class="keyword">else</span> <span class="keyword">if</span> self.ball()
         self.ball().draw canvas
       <span class="keyword">else</span> <span class="keyword">if</span> mousePosition
@@ -258,6 +259,13 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
           y: mousePosition.y
           color: <span class="string">"blue"</span>
           radius: <span class="number">64</span>
+
+        canvas.centerText
+          color: <span class="string">"white"</span>
+          position:
+            x: I.startZone
+            y: mousePosition.y
+          text: <span class="string">"<span class="subst">#{mousePosition.y}</span>"</span>
 
       self.pins.forEach (pin) -&gt;
         pin.draw(canvas)
@@ -276,6 +284,7 @@ module.<span class="function"><span class="title">exports</span></span> = (I={},
             x: <span class="number">10</span>
             y: <span class="number">30</span>
           text: <span class="string">"Skip"</span>
+          color: <span class="string">"white"</span>
 
       <span class="keyword">if</span> I.age &lt; <span class="number">5</span>
         self.drawMessage instructions, canvas
