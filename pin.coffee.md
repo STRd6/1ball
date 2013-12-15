@@ -20,7 +20,11 @@ Portal - Transports entities through it
 
     module.exports = (I={}) ->
       Object.defaults I,
+        age: 0
         hit: false
+        phi: 0
+        osscilate: false
+        omega: 0.5
 
       self = GameObject(I)
 
@@ -30,5 +34,11 @@ Portal - Transports entities through it
         collided: (other) ->
           self.hit true
           self.color "yellow"
+        
+        update: (dt) ->
+          I.age += dt
+
+          if I.osscilate and !I.hit
+            self.position().y = (Math.sin((I.age + I.phi) * Math.TAU * I.omega) * 0.5 + 0.5) * 576
 
       return self

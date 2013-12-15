@@ -165,6 +165,8 @@ Engine
           if I.age > fadeEnd
             fadeStart = fadeEnd = null
 
+          self.objects().invoke "update", dt
+
           unless gameOver
             self.processPhysics(self.objects(), dt)
   

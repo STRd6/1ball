@@ -22,6 +22,13 @@ Levels
 
         p
 
+    osscilate = (pins, deltaPhi=0.1) ->
+      pins.map (p, i) ->
+        p.I.osscilate = true
+        p.I.phi = i * deltaPhi
+
+        p
+
     incorporeal = (pins) ->
       pins.map (p) ->
         p.I.color = "rgba(255, 255, 255, 0.25)"
@@ -165,8 +172,6 @@ Levels
           Point(0.25, 0.75)
           Point(0.75, 0.75)
         ].map restoreAspect
-      "⬡": ->
-        small circle(6)
     }, { # Immobile Chapter
       "⚀": ->
         immobile small [
@@ -305,6 +310,24 @@ Levels
         positions.splice(1, 1)
 
         invisible big positions
+    }, {
+      "⚀?": ->
+        big([
+          Point(0.5, 0.5)
+        ]).concat invisible incorporeal big [
+          Point(0.75, 0.75)
+        ]
+      "∿": ->
+        osscilate incorporeal big [
+          Point(0.2, 0.5)
+          Point(0.3, 0.5)
+          Point(0.4, 0.5)
+          Point(0.5, 0.5)
+          Point(0.6, 0.5)
+          Point(0.7, 0.5)
+          Point(0.8, 0.5)
+          Point(0.9, 0.5)
+        ]
     }, { # Chapter 3
       ":)": ->
         map(semiCircle()).concat big [
@@ -324,7 +347,10 @@ Levels
           Point(0.5, 0.65)
           Point(0.5, 0.8)
         ].map restoreAspect
-      
+
+      "⬡": ->
+        small circle(6)
+        
       "○": ->
         map circle(24)
 
