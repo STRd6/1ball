@@ -376,7 +376,7 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
     ]).concat invisible incorporeal big [
       Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ]
-}, { <span class="comment"># Ossilators 6 levels</span>
+}, { <span class="comment"># Ossilators 7 levels</span>
   <span class="string">"|"</span>: -&gt;
     osscilate incorporeal big [
       Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
@@ -418,6 +418,14 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
     ]), -<span class="number">1</span>).concat small [
       Point(<span class="number">0.35</span>, <span class="number">0.5</span>)
     ]
+  <span class="string">"⚃"</span>: -&gt;
+    osscilate(incorporeal(small [
+      Point(<span class="number">0.25</span>, <span class="number">0.25</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
+    ].map restoreAspect), -<span class="number">1</span>).concat immobile big [
+      Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
+      Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
+    ].map restoreAspect
 }, { <span class="comment"># Bonus town 8 levels</span>
   <span class="string">":)"</span>: -&gt;
     map(semiCircle()).concat big [
