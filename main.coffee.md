@@ -4,12 +4,15 @@
 Draw one line.
 
     require "./setup"
+    Music = require "./lib/music"
     Canvas = require "touch-canvas"
     {Size, Bounds} = require "./lib/util"
     Engine = require "./engine"
 
     FPS = 60
     dt = 1/FPS
+
+    Music.play "music"
 
     size = Size
       width: 1024

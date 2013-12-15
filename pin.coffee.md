@@ -17,6 +17,7 @@ Exploders - Split into multiple
 Portal - Transports entities through it
 
     GameObject = require "./game_object"
+    Sound = require "./lib/sound"
 
     module.exports = (I={}) ->
       Object.defaults I,
@@ -34,7 +35,9 @@ Portal - Transports entities through it
         collided: (other) ->
           self.hit true
           self.color "yellow"
-        
+
+          Sound.play("hit#{rand(4)}")
+
         update: (dt) ->
           I.age += dt
 
