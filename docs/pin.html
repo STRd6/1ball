@@ -61,7 +61,11 @@ Portal - Transports entities through it</p>
 
 module.<span class="function"><span class="title">exports</span></span> = (I={}) -&gt;
   Object.defaults I,
+    age: <span class="number">0</span>
     hit: <span class="literal">false</span>
+    phi: <span class="number">0</span>
+    osscilate: <span class="literal">false</span>
+    omega: <span class="number">0.5</span>
 
   self = GameObject(I)
 
@@ -71,6 +75,12 @@ module.<span class="function"><span class="title">exports</span></span> = (I={})
     collided: (other) -&gt;
       self.hit <span class="literal">true</span>
       self.color <span class="string">"yellow"</span>
+
+    update: (dt) -&gt;
+      I.age += dt
+
+      <span class="keyword">if</span> I.osscilate <span class="keyword">and</span> !I.hit
+        self.position().y = (Math.sin((I.age + I.phi) * Math.TAU * I.omega) * <span class="number">0.5</span> + <span class="number">0.5</span>) * <span class="number">576</span>
 
   <span class="keyword">return</span> self</code></pre>
 </div>

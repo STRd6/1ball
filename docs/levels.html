@@ -55,6 +55,13 @@ small = map
 
     p
 
+<span class="function"><span class="title">osscilate</span></span> = (pins, deltaPhi=<span class="number">0.1</span>) -&gt;
+  pins.map (p, i) -&gt;
+    p.I.osscilate = <span class="literal">true</span>
+    p.I.phi = i * deltaPhi
+
+    p
+
 <span class="function"><span class="title">incorporeal</span></span> = (pins) -&gt;
   pins.map (p) -&gt;
     p.I.color = <span class="string">"rgba(255, 255, 255, 0.25)"</span>
@@ -198,8 +205,6 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ].map restoreAspect
-  <span class="string">"⬡"</span>: -&gt;
-    small circle(<span class="number">6</span>)
 }, { <span class="comment"># Immobile Chapter</span>
   <span class="string">"⚀"</span>: -&gt;
     immobile small [
@@ -338,6 +343,24 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
     positions.splice(<span class="number">1</span>, <span class="number">1</span>)
 
     invisible big positions
+}, {
+  <span class="string">"⚀?"</span>: -&gt;
+    big([
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
+    ]).concat invisible incorporeal big [
+      Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
+    ]
+  <span class="string">"∿"</span>: -&gt;
+    osscilate incorporeal big [
+      Point(<span class="number">0.2</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.3</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.4</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.6</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.7</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.8</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.9</span>, <span class="number">0.5</span>)
+    ]
 }, { <span class="comment"># Chapter 3</span>
   <span class="string">":)"</span>: -&gt;
     map(semiCircle()).concat big [
@@ -357,6 +380,9 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.5</span>, <span class="number">0.65</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.8</span>)
     ].map restoreAspect
+
+  <span class="string">"⬡"</span>: -&gt;
+    small circle(<span class="number">6</span>)
 
   <span class="string">"○"</span>: -&gt;
     map circle(<span class="number">24</span>)
