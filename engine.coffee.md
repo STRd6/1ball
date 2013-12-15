@@ -115,6 +115,12 @@ Engine
             alert "a winner is you"
 
         touch: (position) ->
+          # Check for skip button
+          if p = position.scale(self.size())
+            if 0 <= p.x <= 100
+              if 0 <= p.y <= 30
+                self.goToLevel() # Skip it!
+
           unless self.ball()
             startPosition = currentPosition = position.scale(self.size())
             
@@ -152,6 +158,7 @@ Engine
         update: (dt) ->
           if I.age > resetAt
             resetAt = undefined
+            resetCount = 0
             self.resetLevel()
 
           if I.age > fadeEnd
@@ -223,6 +230,16 @@ Engine
             x = (I.age - fadeStart) / (fadeEnd - fadeStart) * 2
             opacity = (-(x - 1) * (x - 1) + 1).clamp(0, 1)
             canvas.fill "rgba(0, 0, 0, #{opacity.toFixed(8)})"
+          
+          if resetCount >= 10
+            fontSize = 32 + 6 * Math.sin(self.age() * 1.5 * Math.TAU)
+            canvas.font "#{fontSize}px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"
+
+            canvas.drawText
+              position:
+                x: 10
+                y: 30
+              text: "Skip"
 
           if I.age < 5
             self.drawMessage instructions, canvas

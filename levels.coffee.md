@@ -140,7 +140,7 @@ Levels
           Point(0.25, 0.75)
           Point(0.75, 0.25)
         ].map restoreAspect
-      "3": ->
+      "three": ->
         small [
           Point(0.25, 0.5)
           Point(0.5, 0.25)
