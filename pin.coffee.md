@@ -20,10 +20,11 @@ Portal - Transports entities through it
     module.exports = (I={}) ->
       Object.defaults I,
         hit: false
+        immobile: false
 
       self = GameObject(I)
 
-      self.attrAccessor "hit"
+      self.attrAccessor "hit", "immobile"
 
       self.extend
         collided: (other) ->

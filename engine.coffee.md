@@ -14,7 +14,7 @@ Engine
       Object.defaults I,
         age: 0
         chapter: 0
-        levelName: "one" #levelNames.last()
+        levelName: "⚀" #levelNames.last()
         pins: [
           {}
         ]
@@ -256,6 +256,6 @@ Engine
     
         return point
 
-      self.goToLevel(I.levelName)
+      self.goToLevel()
 
       return self

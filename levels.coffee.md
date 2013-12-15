@@ -46,45 +46,47 @@ Levels
       points
 
     module.exports = [{ # Chapter 1
-      one: ->
+      "⚀": ->
         big [
-          Point(0.75, 0.5)
+          Point(0.5, 0.5)
         ]
-      two: ->
+      "⋯": ->
         big [
           Point(0.25, 0.5)
+          Point(0.5, 0.5)
           Point(0.75, 0.5)
         ]
-      deuce: ->
+      "⚁": ->
         big [
-          Point(0.25, 0.1)
-          Point(0.9, 0.9)
-        ]
-      three: ->
+          Point(0.25, 0.75)
+          Point(0.75, 0.25)
+        ].map restoreAspect
+      "⚂": ->
         big [
-          Point(0.25, 0.5)
+          Point(0.25, 0.75)
+          Point(0.5, 0.5)
+          Point(0.75, 0.25)
+        ].map restoreAspect
+      "⋮": ->
+        big [
           Point(0.5, 0.25)
-          Point(0.75, 0.5)
-        ]
-      line: ->
-        big [
-          Point(0.5, 0.25)
+          Point(0.5, 0.5)
           Point(0.5, 0.75)
         ]
-      four: ->
+      "♢": ->
         big [
           Point(0.25, 0.5)
           Point(0.5, 0.25)
           Point(0.75, 0.5)
           Point(0.5, 0.75)
-        ]
-      triangle: ->
+        ].map restoreAspect
+      "⊿": ->
         big [
           Point(0.75, 0.25)
           Point(0.25, 0.75)
           Point(0.75, 0.75)
         ].map restoreAspect
-      "□": ->
+      "⚃": ->
         big [
           Point(0.25, 0.25)
           Point(0.75, 0.25)
@@ -98,29 +100,31 @@ Levels
 
         big positions
     }, { # Chapter 2
-      one: ->
+      "⚀": ->
         small [
-          Point(0.75, 0.5)
+          Point(0.5, 0.5)
         ]
-      two: ->
+      "⋯": ->
         small [
           Point(0.25, 0.5)
+          Point(0.5, 0.5)
           Point(0.75, 0.5)
         ]
-      deuce: ->
+      "⚁": ->
         small [
-          Point(0.25, 0.1)
-          Point(0.9, 0.9)
-        ]
+          Point(0.25, 0.75)
+          Point(0.75, 0.25)
+        ].map restoreAspect
       three: ->
         small [
           Point(0.25, 0.5)
           Point(0.5, 0.25)
           Point(0.75, 0.5)
         ]
-      line: ->
+      "⋮": ->
         small [
           Point(0.5, 0.25)
+          Point(0.5, 0.5)
           Point(0.5, 0.75)
         ]
       four: ->
@@ -130,13 +134,13 @@ Levels
           Point(0.75, 0.5)
           Point(0.5, 0.75)
         ]
-      triangle: ->
+      "⊿": ->
         small [
           Point(0.75, 0.25)
           Point(0.25, 0.75)
           Point(0.75, 0.75)
         ].map restoreAspect
-      "□": -> # This one is tough!
+      "⚃": -> # This one is tough!
         small [
           Point(0.25, 0.25)
           Point(0.75, 0.25)
