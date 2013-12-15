@@ -79,45 +79,47 @@ small = map
   points
 
 module.exports = [{ <span class="comment"># Chapter 1</span>
-  one: -&gt;
+  <span class="string">"⚀"</span>: -&gt;
     big [
-      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
     ]
-  two: -&gt;
+  <span class="string">"⋯"</span>: -&gt;
     big [
       Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
     ]
-  deuce: -&gt;
+  <span class="string">"⚁"</span>: -&gt;
     big [
-      Point(<span class="number">0.25</span>, <span class="number">0.1</span>)
-      Point(<span class="number">0.9</span>, <span class="number">0.9</span>)
-    ]
-  three: -&gt;
+      Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
+      Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
+    ].map restoreAspect
+  <span class="string">"⚂"</span>: -&gt;
     big [
-      Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
+    ].map restoreAspect
+  <span class="string">"⋮"</span>: -&gt;
+    big [
       Point(<span class="number">0.5</span>, <span class="number">0.25</span>)
-      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
-    ]
-  line: -&gt;
-    big [
-      Point(<span class="number">0.5</span>, <span class="number">0.25</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.75</span>)
     ]
-  four: -&gt;
+  <span class="string">"♢"</span>: -&gt;
     big [
       Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.25</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.75</span>)
-    ]
-  triangle: -&gt;
+    ].map restoreAspect
+  <span class="string">"⊿"</span>: -&gt;
     big [
       Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
       Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ].map restoreAspect
-  <span class="string">"□"</span>: -&gt;
+  <span class="string">"⚃"</span>: -&gt;
     big [
       Point(<span class="number">0.25</span>, <span class="number">0.25</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
@@ -131,29 +133,31 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
 
     big positions
 }, { <span class="comment"># Chapter 2</span>
-  one: -&gt;
+  <span class="string">"⚀"</span>: -&gt;
     small [
-      Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
     ]
-  two: -&gt;
+  <span class="string">"⋯"</span>: -&gt;
     small [
       Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
     ]
-  deuce: -&gt;
+  <span class="string">"⚁"</span>: -&gt;
     small [
-      Point(<span class="number">0.25</span>, <span class="number">0.1</span>)
-      Point(<span class="number">0.9</span>, <span class="number">0.9</span>)
-    ]
+      Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
+      Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
+    ].map restoreAspect
   three: -&gt;
     small [
       Point(<span class="number">0.25</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.25</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
     ]
-  line: -&gt;
+  <span class="string">"⋮"</span>: -&gt;
     small [
       Point(<span class="number">0.5</span>, <span class="number">0.25</span>)
+      Point(<span class="number">0.5</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.75</span>)
     ]
   four: -&gt;
@@ -163,13 +167,13 @@ module.exports = [{ <span class="comment"># Chapter 1</span>
       Point(<span class="number">0.75</span>, <span class="number">0.5</span>)
       Point(<span class="number">0.5</span>, <span class="number">0.75</span>)
     ]
-  triangle: -&gt;
+  <span class="string">"⊿"</span>: -&gt;
     small [
       Point(<span class="number">0.75</span>, <span class="number">0.25</span>)
       Point(<span class="number">0.25</span>, <span class="number">0.75</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.75</span>)
     ].map restoreAspect
-  <span class="string">"□"</span>: -&gt; <span class="comment"># This one is tough!</span>
+  <span class="string">"⚃"</span>: -&gt; <span class="comment"># This one is tough!</span>
     small [
       Point(<span class="number">0.25</span>, <span class="number">0.25</span>)
       Point(<span class="number">0.75</span>, <span class="number">0.25</span>)

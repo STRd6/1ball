@@ -61,10 +61,11 @@ Portal - Transports entities through it</p>
 module.<span class="function"><span class="title">exports</span></span> = (I={}) -&gt;
   Object.defaults I,
     hit: <span class="literal">false</span>
+    immobile: <span class="literal">false</span>
 
   self = GameObject(I)
 
-  self.attrAccessor <span class="string">"hit"</span>
+  self.attrAccessor <span class="string">"hit"</span>, <span class="string">"immobile"</span>
 
   self.extend
     collided: (other) -&gt;
