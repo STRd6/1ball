@@ -22,6 +22,13 @@ Levels
 
         p
 
+    incorporeal = (pins) ->
+      pins.map (p) ->
+        p.I.color = "rgba(255, 255, 255, 0.25)"
+        p.I.incorporeal = true
+
+        p
+
     invisible = (pins) ->
       pins.map (p) ->
         p.I.color = "transparent"
@@ -196,34 +203,80 @@ Levels
         ].map restoreAspect
       "⬡": ->
         immobile small circle(6)
+    }, { # Incorporeal
+      "⚀": ->
+        incorporeal big [
+          Point(0.5, 0.5)
+        ]
+      "⋯": ->
+        incorporeal big [
+          Point(0.25, 0.5)
+          Point(0.5, 0.5)
+          Point(0.75, 0.5)
+        ]
+      "⚁": ->
+        incorporeal big [
+          Point(0.25, 0.75)
+          Point(0.75, 0.25)
+        ].map restoreAspect
+
+      "⚂": ->
+        incorporeal big [
+          Point(0.25, 0.75)
+          Point(0.5, 0.5)
+          Point(0.75, 0.25)
+        ].map restoreAspect
+
+      ">": ->
+        incorporeal(big [
+          Point(0.25, 0.25)
+          Point(0.25, 0.75)
+        ]).concat immobile small [
+          Point(0.75, 0.5)
+        ]
+
+      ">2": ->
+        incorporeal(big [
+          Point(0.25, 0.25)
+          Point(0.25, 0.75)
+        ]).concat immobile small [
+          Point(0.75, 0.5)
+          Point(0.15, 0.15)
+          Point(0.15, 0.85)
+        ]
     }, { # Invisible chapter
       "⚀": ->
         invisible big [
           Point(0.5, 0.5)
         ]
+
       "⋯": ->
         invisible big [
           Point(0.25, 0.5)
           Point(0.5, 0.5)
           Point(0.75, 0.5)
         ]
+
       "⚁": ->
         invisible big [
           Point(0.25, 0.75)
           Point(0.75, 0.25)
         ].map restoreAspect
+
       "⚂": ->
         invisible big [
           Point(0.25, 0.75)
           Point(0.5, 0.5)
           Point(0.75, 0.25)
         ].map restoreAspect
+
       "⋮": ->
         invisible big [
           Point(0.5, 0.25)
           Point(0.5, 0.5)
           Point(0.5, 0.75)
         ]
+
       "♢": ->
         invisible big [
           Point(0.25, 0.5)
@@ -231,12 +284,14 @@ Levels
           Point(0.75, 0.5)
           Point(0.5, 0.75)
         ].map restoreAspect
+
       "⊿": ->
         invisible big [
           Point(0.75, 0.25)
           Point(0.25, 0.75)
           Point(0.75, 0.75)
         ].map restoreAspect
+
       "⚃": ->
         invisible big [
           Point(0.25, 0.25)
@@ -251,17 +306,6 @@ Levels
 
         invisible big positions
     }, { # Chapter 3
-      "⬭": -> # Not solved yet
-        small circle(24, 0.3, true)
-
-      "⚃": -> # This one is tough!
-        small [
-          Point(0.25, 0.25)
-          Point(0.75, 0.25)
-          Point(0.25, 0.75)
-          Point(0.75, 0.75)
-        ].map restoreAspect
-
       ":)": ->
         map(semiCircle()).concat big [
           Point(0.4, 0.33)
@@ -283,4 +327,15 @@ Levels
       
       "○": ->
         map circle(24)
+
+      "⬭": -> # Not solved yet
+        small circle(24, 0.3, true)
+
+      "⚃": -> # This one is tough!
+        small [
+          Point(0.25, 0.25)
+          Point(0.75, 0.25)
+          Point(0.25, 0.75)
+          Point(0.75, 0.75)
+        ].map restoreAspect
     }]

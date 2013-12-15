@@ -7,6 +7,7 @@ Game Object
       Object.defaults I,
         color: "white"
         immobile: false
+        incorporeal: false
         velocity:
           x: 0
           y: 0
@@ -18,7 +19,7 @@ Game Object
 
       self.include Compositions
 
-      self.attrAccessor "color", "immobile", "mass", "radius"
+      self.attrAccessor "color", "immobile", "incorporeal", "mass", "radius"
 
       self.attrModel "velocity", Point
       self.attrModel "position", Point

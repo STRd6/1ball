@@ -17,7 +17,10 @@ Stolen from Red Ice: https://raw.github.com/PixieEngine/RedIce/pixie/src/physics
 
         totalMass = massA + massB
 
-        if A.immobile()
+        if A.incorporeal() or B.incorporeal()
+          pushA = Point(0, 0)
+          pushB = Point(0, 0)
+        else if A.immobile()
           pushA = Point(0, 0)
           pushB = normal.scale(+2 * (relativeVelocity.dot(normal)))
         else if B.immobile()
