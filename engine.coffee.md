@@ -46,9 +46,7 @@ Engine
       startPosition = currentPosition = null
 
       getPower = (a, b) ->
-        p = Point.distance(a, b) / 200
-        
-        p.clamp 0, 1
+        1
 
       gameOver = false
 
@@ -125,7 +123,7 @@ Engine
           unless self.ball()
             startPosition = currentPosition = position.scale(self.size())
             
-            startPosition.x = startPosition.x.clamp(0, I.startZone)
+            startPosition.x = I.startZone
 
         move: (position) ->
           currentPosition = position.scale(self.size())
@@ -197,6 +195,9 @@ Engine
             height: self.size().height
             color: "gray"
 
+          fontSize = 32 + 6 * Math.sin(self.age() * 1.5 * Math.TAU)
+          canvas.font "#{fontSize}px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"
+
           if startPosition
             power = getPower(startPosition, currentPosition)
             
@@ -210,13 +211,13 @@ Engine
               start: startPosition
               end: currentPosition
               color: "black"
-            
-            fontSize = 32 + 6 * Math.sin(self.age() * 1.5 * Math.TAU)
-            canvas.font "#{fontSize}px bold 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"
+
+            angle = Point.direction(startPosition, currentPosition)/Math.TAU
+
             canvas.centerText
               color: "white"
               position: currentPosition
-              text: (power * 100).toFixed(2)
+              text: "#{startPosition.y} #{angle.toFixed(2)}τ"
           else if self.ball()
             self.ball().draw canvas
           else if mousePosition
@@ -225,6 +226,13 @@ Engine
               y: mousePosition.y
               color: "blue"
               radius: 64
+
+            canvas.centerText
+              color: "white"
+              position:
+                x: I.startZone
+                y: mousePosition.y
+              text: "#{mousePosition.y}"
           
           self.pins.forEach (pin) ->
             pin.draw(canvas)
@@ -243,6 +251,7 @@ Engine
                 x: 10
                 y: 30
               text: "Skip"
+              color: "white"
 
           if I.age < 5
             self.drawMessage instructions, canvas
